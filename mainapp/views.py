@@ -12,6 +12,7 @@ class NewsPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["news_title"] = "Zagolovok_test"
         context["news_preview"] = "Opisanie_test"
+        context["range"] = range(5)
         return context
 
 

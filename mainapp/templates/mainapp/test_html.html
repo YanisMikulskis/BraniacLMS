@@ -1,19 +1,22 @@
-{% extends 'base.html' %}
+% extends 'base.html' %}
 
 {% block content %}
+
   <div class="row">
 
     <div class="col-lg-8">
-      {% for card in range %}
+
+      {% for i in range %}
         <div class="card my-2">
           <div class="card-body">
             <h5 class="card-title">{{ news_title }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">2021-04-29 20-50-26</h6>
-            <p class="card-text">Предварительное описание новости</p>
+            <p class="card-text">{{ news_preview }}</p>
             <a href="#" class="card-link">Подробнее</a>
           </div>
         </div>
       {% endfor %}
+
     </div>
 
     <div class="col-lg-4">
@@ -36,7 +39,8 @@
               <input type="date" class="form-control" name="dateTo">
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Фильтровать</button>
+            <button type="submit"
+                    class="btn btn-primary btn-block">Фильтровать</button>
           </form>
         </div>
       </div>
@@ -55,4 +59,5 @@
       </ul>
     </nav>
   </div>
+
 {% endblock content %}
