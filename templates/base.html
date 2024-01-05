@@ -37,9 +37,9 @@
           </p>
           <p>
             <ul class="list-unstyled">
-              <li><a href="index.html">Домашняя</a></li>
-              <li><a href="news.html">Новости</a></li>
-              <li><a href="login.html">Войти</a></li>
+              <li><a href="{% url 'mainapp_namespace:main_page' %}">Домашняя</a></li>
+              <li><a href="{% url 'mainapp_namespace:news_page' %}">Новости</a></li>
+              <li><a href="{% url 'mainapp_namespace:login_page' %}">Войти</a></li>
             </ul>
           </p>
         </div>
@@ -49,7 +49,7 @@
           </p>
           <p>
             <ul class="list-unstyled">
-              <li><a href="#">Положения &amp; Условия</a></li>
+              <li><a href="{% url 'mainapp_namespace:test_page_for_namespace' %}">Положения &amp; Условия</a></li>
               <li><a href="#">Конфиденциальность &amp; Cookies</a></li>
               <li><a href="#">Документация по API</a></li>
               <li><a href="doc_site.html">Документация по сайту</a></li>
@@ -102,7 +102,7 @@
     <script src="{% static 'js/Chart.min.js' %}"></script>
 
 <!-- FontAwesome -->
-    <script src="{% static '/js/fontawesome.all.min.js' %"></script>
+    <script src="{% static '/js/fontawesome.all.min.js' %}"></script>
 
 
 

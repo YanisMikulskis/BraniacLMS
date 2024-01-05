@@ -33,3 +33,7 @@ class DocSitePageView(TemplateView):
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
+
+
+class TestPageView(TemplateView):
+    template_name = "mainapp/test_html.html"
