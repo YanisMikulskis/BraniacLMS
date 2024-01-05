@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.views.generic import TemplateView
 
 
@@ -13,14 +15,7 @@ class NewsPageView(TemplateView):
         context["news_title"] = "Zagolovok_test"
         context["news_preview"] = "Opisanie_test"
         context["range"] = range(5)
-        context["paginator_range"] = range(10)
-        context["tags"] = [
-            ["Vika", "One"],
-            ["Suchka", "Two"],
-            ["Brusnichka", "Three"],
-            ["Kisulya", "Four"],
-            ["Sraka", "Five"],
-        ]
+        context["datetime_obj"] = datetime.now()
         return context
 
 
