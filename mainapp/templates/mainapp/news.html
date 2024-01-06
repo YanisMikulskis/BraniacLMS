@@ -4,7 +4,13 @@
 
 
   {% with range as double_range %}
-
+    {% if page_num %}
+      <div class = "card my-2">
+        <div class = "card-body">
+          <p class = "card-text">Текущая страница: {{ page_num }}</p>
+        </div>
+      </div>
+    {% endif %}
 
     <div class="row">
 
