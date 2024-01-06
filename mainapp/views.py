@@ -15,7 +15,7 @@ class NewsPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["news_title"] = "Zagolovok_test"
         context["news_preview"] = "Opisanie_test"
-        context["range"] = range(5)
+        context["range"] = range(1, 6)
         context["datetime_obj"] = datetime.now()
         context["test_title"] = "Test_zagolovok"
         context["test_preview"] = "Test_opisanie"
@@ -46,4 +46,7 @@ class NewsWithPaginatorView(NewsPageView):
     def get_context_data(self, page, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(page=page, **kwargs)
         context["page_num"] = page
+        # context["range_pag"] = range(1,6) if page == 1 else range(6, 12)
+        dict_page = {1: range(1, 6), 2: range(6, 11), 3: range(11, 16), 4: range(16, 21), 5: range(21, 23)}
+        context["range_pag"] = dict_page[page]
         return context

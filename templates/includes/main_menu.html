@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li
-          class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:news_page' %}active{% endif %}">
+          class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:news_page' or request.resolver_match.view_name == 'mainapp_namespace:news_paginator' %}active{% endif %}">
           <a class="nav-link" href="{% url 'mainapp_namespace:news_page' %}">Новости</a>
         </li>
         <li
