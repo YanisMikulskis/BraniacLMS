@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from django.views.generic import TemplateView
 
@@ -16,6 +17,8 @@ class NewsPageView(TemplateView):
         context["news_preview"] = "Opisanie_test"
         context["range"] = range(5)
         context["datetime_obj"] = datetime.now()
+        context["test_title"] = "Test_zagolovok"
+        context["test_preview"] = "Test_opisanie"
         return context
 
 
@@ -37,3 +40,10 @@ class LoginPageView(TemplateView):
 
 class TestPageView(TemplateView):
     template_name = "mainapp/test_html.html"
+
+
+class NewsWithPaginatorView(NewsPageView):
+    def get_context_data(self, page, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(page=page, **kwargs)
+        context["page_num"] = page
+        return context

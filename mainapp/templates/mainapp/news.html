@@ -53,9 +53,12 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          {% for elem in double_range %}
-            <li class="page-item"><a class="page-link" href="#">{{ elem }}</a></li>
-          {% endfor %}
+          <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' 1 %}">1</a></li>
+          <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=2 %}">2</a></li>
+          <!-- {% for elem in double_range %}
+            <li class="page-item"><a class="page-link" href="{% if elem == 1 %}{% url 'mainapp_namespace:news_page' %}{% endif %}">{{ elem }}</a></li>
+
+          {% endfor %} -->
           <li class="page-item"><a class="page-link" href="#">Next</a></li>
         </ul>
       </nav>
