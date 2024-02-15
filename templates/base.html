@@ -38,7 +38,7 @@
           <p>
             <ul class="list-unstyled">
               <li><a href="{% url 'mainapp_namespace:main_page' %}">Домашняя</a></li>
-              <li><a href="{% url 'mainapp_namespace:news_page' %}">Новости</a></li>
+              <li><a href="{% url 'mainapp_namespace:news_paginator' page=1 %}">Новости</a></li>
               <li><a href="{% url 'mainapp_namespace:login_page' %}">Войти</a></li>
             </ul>
           </p>

@@ -9,6 +9,7 @@ urlpatterns = [
     path("", views.MainPageView.as_view(), name="main_page"),
     path("news/", views.NewsPageView.as_view(), name="news_page"),
     path("news/<int:page>/", views.NewsWithPaginatorView.as_view(), name="news_paginator"),
+    # path("news/<int:page>/", views.NewsWithPaginatorCarouselView.as_view(), name="news_carousel"),
     path("courses/", views.CoursesPageView.as_view(), name="courses_page"),
     path("contacts/", views.ContactsPageView.as_view(), name="contacts_page"),
     path("doc_site/", views.DocSitePageView.as_view(), name="doc_page"),
