@@ -3,92 +3,77 @@
 {% block content %}
 
 
-  {% with range_for_news as first_range %}
 
-    {% if page_number %}
-      <div class = "card my-2">
-        <div class = "card-body">
-          <p class = "card-text">Текущая страница: {{ page_number }}</p>
-        </div>
+
+  {% if page_number %}
+    <div class = "card my-2">
+      <div class = "card-body">
+        <p class = "card-text">Текущая страница: {{ page_number }}</p>
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
+  <div class="row">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="row">
-
-      <div class="col-lg-8">
-        {% for number in range_for_news %}
-          <div class="card my-2">
-            <div class="card-body">
-              <h5 class="card-title">{{ news_title }} под номером {{ number }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ datetime_obj|date:"Y-m-d h-i-s" }}</h6>
-              <p class="card-text">{{ news_preview }} pod nomerom {{ number }}</p>
-              <a href="#" class="card-link">Подробнее</a>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-
-
-
-
-
-      <div class="col-lg-4">
-        <div class="card my-2 sticky-top">
-          <div class="card-header">
-            Фильтры
-          </div>
+    <div class="col-lg-8">
+      {% for number in range_for_news %}
+        <div class="card my-2">
           <div class="card-body">
-            <form action="">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Дата от...</span>
-                </div>
-                <input type="date" class="form-control" name="dateFrom">
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Дата до...</span>
-                </div>
-                <input type="date" class="form-control" name="dateTo">
-              </div>
-
-              <button type="submit" class="btn btn-primary btn-block">Фильтровать</button>
-            </form>
+            <h5 class="card-title">{{ news_title }} под номером {{ number }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ datetime_obj|date:"Y-m-d h-i-s" }}</h6>
+            <p class="card-text">{{ news_preview }} pod nomerom {{ number }}</p>
+            <a href="#" class="card-link">Подробнее</a>
           </div>
         </div>
+      {% endfor %}
+    </div>
+
+
+
+
+
+    <div class="col-lg-4">
+      <div class="card my-2 sticky-top">
+        <div class="card-header">
+          Фильтры
+        </div>
+        <div class="card-body">
+          <form action="">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Дата от...</span>
+              </div>
+              <input type="date" class="form-control" name="dateFrom">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Дата до...</span>
+              </div>
+              <input type="date" class="form-control" name="dateTo">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Фильтровать</button>
+          </form>
+        </div>
       </div>
-
     </div>
 
-    <div class="row justify-content-center align-items-center mt-3 mb-n3">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
+  </div>
 
-          <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=previous_page%}">Previous</a></li>
+  <div class="row justify-content-center align-items-center mt-3 mb-n3">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
 
-          {% for number_page in paginator_range %}
-            <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=number_page %}?param1=1">{{ number_page }}</a></li>
-          {% endfor %}
+        <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=previous_page%}">Previous</a></li>
 
-          <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=next_page%}">Next</a></li>
-        </ul>
-      </nav>
-    </div>
+        {% for number_page in paginator_range %}
+          <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=number_page %}?param1=1">{{ number_page }}</a></li>
+        {% endfor %}
 
-  {% endwith %}
+        <li class="page-item"><a class="page-link" href="{% url 'mainapp_namespace:news_paginator' page=next_page%}">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+
+
 {% endblock content %}
