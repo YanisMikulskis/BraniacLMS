@@ -66,5 +66,3 @@ class CourseTeachers(models.Model):
         self.deleted = True
         self.save()
 
-    class Meta:
-        ordering = ('surname_teacher')
