@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
+{%  block title %}
+Новости
+{%  endblock title %}
+
+
 {% block content %}
-
-
-
 
   {% if page_number %}
     <div class = "card my-2">
@@ -16,12 +18,14 @@
   <div class="row">
 
     <div class="col-lg-8">
-      {% for number in range_for_news %}
+      {% for number in news_qs %}
         <div class="card my-2">
           <div class="card-body">
-            <h5 class="card-title">{{ news_title }} под номером {{ number }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ datetime_obj|date:"Y-m-d h-i-s" }}</h6>
-            <p class="card-text">{{ news_preview }} pod nomerom {{ number }}</p>
+            <h5 class="card-title">{{ number.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                {{ datetime_obj|date:"Y-m-d h-i-s" }}
+            </h6>
+            <p class="card-text">{{ number.preambule }}</p>
             <a href="#" class="card-link">Подробнее</a>
           </div>
         </div>

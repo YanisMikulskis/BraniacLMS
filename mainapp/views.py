@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Any
-
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-
+from .models import News
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -13,13 +13,17 @@ class NewsPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["news_title"] = "Zagolovok_test"
-        context["news_preview"] = "Opisanie_test"
-        # context["page_number"] = page
-        context["first_range"] = range(1, 6)
-        context["datetime_obj"] = datetime.now()
-        context["test_title"] = "Test_zagolovok"
-        context["test_preview"] = "Test_opisanie"
+        context['news_qs'] = News.objects.all()[:5]
+        #
+        #
+        #
+        # context["news_title"] = "Zagolovok_test"
+        # context["news_preview"] = "Opisanie_test"
+        # # context["page_number"] = page
+        # #context["first_range"] = range(1, 6)
+        # context["datetime_obj"] = datetime.now()
+        # context["test_title"] = "Test_zagolovok"
+        # context["test_preview"] = "Test_opisanie"
         return context
 
 
@@ -55,9 +59,9 @@ class NewsWithPaginatorView(NewsPageView):
         context["paginator_range"] = range(1, 6)
         return context
 
-
-# class NewsWithPaginatorCarouselView(NewsWithPaginatorView):
-#   def get_context_data(self, carousel, **kwargs: Any) -> dict[str, Any]:
-#       context = super().get_context_data(carousel=carousel, **kwargs)
-#       context["range_pag"] = dict_page[page - 1] if carousel == 'left' else dict_page[page + 1]
-#       return context
+class NewPageDetailView(TemplateView):
+    template_name = 'mainapp/news_detail.html'
+    def get_context_data(self, pk= None, **kwargs):
+        context = super().get_context_data(pk=pk, **kwargs)
+        context['news_object'] = get_object_or_404(News, pk=pk)
+        return context
