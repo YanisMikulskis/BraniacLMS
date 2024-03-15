@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-{%  block title %}
-Новости
-{%  endblock title %}
+
 
 
 {% block content %}
@@ -10,7 +8,7 @@
   {% if page_number %}
     <div class = "card my-2">
       <div class = "card-body">
-        <p class = "card-text">Текущая страница: {{ page_number }}</p>
+        <p class = "card-text">Текущая страница новостей: {{ page_number }}</p>
       </div>
     </div>
   {% endif %}
@@ -26,7 +24,8 @@
                 {{ datetime_obj|date:"Y-m-d h-i-s" }}
             </h6>
             <p class="card-text">{{ number.preambule }}</p>
-            <a href="#" class="card-link">Подробнее</a>
+            <a href="{% url 'mainapp_namespace:detail_news' pk=number.pk %}"
+               class="card-link">Подробнее</a>
           </div>
         </div>
       {% endfor %}
@@ -47,13 +46,17 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Дата от...</span>
               </div>
-              <input type="date" class="form-control" name="dateFrom">
+                <label>
+                    <input type="date" class="form-control" name="dateFrom">
+                </label>
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Дата до...</span>
               </div>
-              <input type="date" class="form-control" name="dateTo">
+                <label>
+                    <input type="date" class="form-control" name="dateTo">
+                </label>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Фильтровать</button>
