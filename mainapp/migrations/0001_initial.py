@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name_teacher', models.CharField(max_length=128, verbose_name='Name teacher')),
                 ('surname_teacher', models.CharField(max_length=128, verbose_name='Surname teacher')),
-                ('day_birth', models.DateTimeField(verbose_name='BD')),
+                ('day_birth', models.DateField(verbose_name='BD')),
                 ('deleted', models.BooleanField(default=False)),
                 ('course', models.ManyToManyField(to='mainapp.Courses')),
             ],

@@ -1,7 +1,6 @@
 # Create your models here.
 from django.db import models
-
-
+from django.conf import settings
 class News(models.Model):
     title = models.CharField(max_length=256, verbose_name='Title_verbose')
     preambule = models.CharField(max_length=1024, verbose_name='Preambule_verbose')
@@ -27,7 +26,7 @@ class Courses(models.Model):
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.pk}:{self.name}'
+        return f'{self.pk}:{self.name }'
 
     def delete(self, using=None, keep_parents=False):
         self.deleted = True
@@ -56,7 +55,7 @@ class CourseTeachers(models.Model):
     course = models.ManyToManyField(Courses)
     name_teacher = models.CharField(max_length=128, verbose_name='Name teacher')
     surname_teacher = models.CharField(max_length=128, verbose_name='Surname teacher')
-    day_birth = models.DateTimeField(verbose_name='BD')
+    day_birth = models.DateField(verbose_name='BD')
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
