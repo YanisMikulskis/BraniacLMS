@@ -54,8 +54,8 @@ class TestPageView(TemplateView):
 class NewsWithPaginatorView(NewsPageView):
     page_by_class = 0
     def get_context_data(self, page, **kwargs: Any) -> dict[str, Any]:
-        NewsWithPaginatorView.page_by_class = page #введено для того, чтобы при подробном нажатии на кнопку "Назад" мы
-        #возвращались на текущую страницу
+        NewsWithPaginatorView.page_by_class = page #введено для того, чтобы при нажатии на кнопку "Назад" мы
+        #возвращались на текущую страницу из пагинатора
         context = super().get_context_data(page=page, **kwargs)
         context["page_number"] = page
         dict_page = {1: range(1, 6), 2: range(6, 11), 3: range(11, 16), 4: range(16, 21), 5: range(21, 25)}

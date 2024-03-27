@@ -65,3 +65,29 @@ class CourseTeachers(models.Model):
         self.deleted = True
         self.save()
 
+
+class Intermediate(models.Model):
+    teacher_inter = models.ForeignKey(to=CourseTeachers, on_delete=models.CASCADE)
+    course_inter = models.ForeignKey(to=Courses, on_delete=models.CASCADE)
+    deleted = models.BooleanField(default=False)
+    def __str__(self):
+        return f'{self.teacher_inter}: курсы: {self.course_inter}'
+
+# class Intermediate(models.Model): #тут тоже нужна миграция
+#     teacher_enr = models.ForeignKey(CourseTeachers, on_delete=models.CASCADE)
+#     course_enr = models.ForeignKey(Courses, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=256, verbose_name='name')
+#     description = models.TextField(blank=1, null=1, verbose_name='Description')
+#     description_as_markdown = models.BooleanField(default=False, verbose_name='As markdown')
+#     cost = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Cost')
+#     cover = models.CharField(max_length=25, default='no_image.svg', verbose_name='Cover')
+#     created = models.DateTimeField(auto_now_add=True, verbose_name='Created')
+#     updated = models.DateTimeField(auto_now=True, verbose_name='Updated')
+#     deleted = models.BooleanField(default=False)
+#
+#     def __str__(self):
+#         return f'{self.pk}:{self.name}'
+#
+#     def delete(self, using=None, keep_parents=False):
+#         self.deleted = False
+#         self.save()

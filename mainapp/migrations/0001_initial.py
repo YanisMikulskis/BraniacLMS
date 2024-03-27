@@ -68,4 +68,5 @@ class Migration(migrations.Migration):
                 ('course', models.ManyToManyField(to='mainapp.Courses')),
             ],
         ),
+
     ]
