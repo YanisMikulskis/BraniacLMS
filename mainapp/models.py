@@ -73,6 +73,20 @@ class Intermediate(models.Model):
     def __str__(self):
         return f'{self.teacher_inter}: курсы: {self.course_inter}'
 
+class DataTransfer(models.Model):
+    title_transfer = models.CharField(max_length=256, verbose_name='Title_verbose')
+    preambule_transfer = models.CharField(max_length=1024, verbose_name='Preambule_verbose')
+    body_transfer = models.TextField(blank=True, null=True, verbose_name='Body_verbose')
+    body_as_markdown_transfer = models.BooleanField(default=False, verbose_name='As markdown verbose')
+    created_transfer = models.DateTimeField(auto_now_add=True, verbose_name='Created verbose', editable=False)
+    updated_transfer = models.DateTimeField(auto_now=True, verbose_name='Update_verbose', editable=False)
+    deleted_transfer = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.pk}  {self.title_transfer}'
+    def delete(self, *args):
+        self.deleted_transfer = True
+        self.save()
 # class Intermediate(models.Model): #тут тоже нужна миграция
 #     teacher_enr = models.ForeignKey(CourseTeachers, on_delete=models.CASCADE)
 #     course_enr = models.ForeignKey(Courses, on_delete=models.CASCADE)

@@ -8,6 +8,7 @@ def forwards_func(apps, schema_editor):
     News = apps.get_model('mainapp', 'News')
     #Create models objects
     News.objects.create(
+        id = 1,
         title='Запуск нового курса по Python',
         preambule='Мы рады вам сообщить о запуске нового курса по Python для начинающих!',
         body='Python предназначен для разработки и изучения новых приложений. Мы предлагаем непросто изучить новый '
@@ -18,6 +19,7 @@ def forwards_func(apps, schema_editor):
     )
 
     News.objects.create(
+        id = 2,
         title='Урок по PHP в среду не состоится',
         preambule='Всем, кто не успел купить курс в понедельник, настоятельно рекомендую это сделать по ссылке в '
                   'конце публикации',
@@ -29,6 +31,7 @@ def forwards_func(apps, schema_editor):
     )
 
     News.objects.create(
+        id = 3,
         title='Всем руководителям подразделений подключится к Zoom',
         preambule='Все сотрудники подключены к Zoom, поэтому мы видим, что они делают и говорят.',
         body='Каждый из 5 руководителей будет в одном из своих офисов и использовать это приложение. Мы хотим, '
@@ -38,6 +41,7 @@ def forwards_func(apps, schema_editor):
     )
 
     News.objects.create(
+        id = 4,
         title='Сегодня студенты всего мира отмечают праздник',
         preambule='Подробности — внутри...',
         body='Сегодня студенты всего мира отмечают праздник, который официально признаётся международным, '
@@ -49,6 +53,7 @@ def forwards_func(apps, schema_editor):
     )
 
     News.objects.create(
+        id = 5,
         title='Встречайте нового преподавателя направления DevOps3',
         preambule='Дмитрий Шишмарёв работает в IT-бизнесе с 2001 года.',
         body='До прихода в компанию «1С-Битрикс» начинал карьеру в качестве системного администратора. '
@@ -58,6 +63,7 @@ def forwards_func(apps, schema_editor):
     )
 
     News.objects.create(
+        id = 6,
         title='JavaScript снова возглавил рейтинг самых отвратительных языков',
         preambule='И опять, и снова.',
         body='Рейтинг самых отвратительных языков программирования, составленный британским изданием, возглавляет '
