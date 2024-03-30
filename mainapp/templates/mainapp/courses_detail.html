@@ -2,24 +2,25 @@
 {% load static markdownify %}
 {% block content %}
 <h1 class="mt-2">
-    {{ new_object_courses.name }}
+    {{ Courses.name }}
 </h1>
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-6 col-lg-8 order-2 order-md-1">
         <div class="row h-100">
             <div class="col-12">
-                {% if new_object_courses.description_as_markdown %}
-                    {{ new_object_courses.description|markdownify }}
+                {% if Courses.description_as_markdown %}
+                    {{ Courses.description|markdownify }}
                 {% else %}
-                    {{ new_object_courses.description }}
+                    {{ Courses.description }}
                 {% endif %}
             </div>
 
             <div class="col-12 align-self-end">
                 <p>
                     <small>Преподаватели</small><br>
-                    {% for item in teachers %}
-                    {{ item.name_second }} {{ item.name_first }}{% if forloop.last %}{% else %},{% endif %}
+
+                    {% for item in Teachers %}
+                    {{ item.name_teacher }} {{ item.surname_teacher }}{% if forloop.last %}{% else %},{% endif %}
                     {% endfor %}
                 </p>
             </div>
@@ -27,12 +28,12 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4 order-1 order-md-2"> <div class="row h-100">
         <div class="col-12 align-self-start">
-            <img class="w-100" src="{% static new_object_courses.cover %}">
+            <img class="w-100" src="{% static Courses.cover %}">
         </div>
         <div class="col-12 align-self-end d-none d-md-block">
             <p class="text-center mt-2">
                 <small class="text-uppercase">цена</small><br> <span style="font-size: 30pt;">
-                    {{ new_object_courses.cost }}
+                    {{ Courses.cost }}
                 </span><br>
                     <a href="#" class="btn btn-outline-primary btn-block"
                         role="button">Купить</a>
@@ -44,7 +45,7 @@
         <p class="text-center">
             <small class="text-uppercase">цена</small><br>
             <span style="font-size: 30pt;">
-                {{ new_object_courses.cost }}
+                {{ Courses.cost }}
             </span><br>
             <a href="#" class="btn btn-outline-primary btn-block"
                role="button">Купить</a>

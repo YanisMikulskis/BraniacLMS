@@ -21,16 +21,16 @@ class CoursesPageView(TemplateView):
     template_name = "mainapp/courses_list.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['courses_qs'] = Courses.objects.all()
+        context['Courses'] = Courses.objects.all()
         return context
 
 class CoursesDetailView(TemplateView):
     template_name = "mainapp/courses_detail.html"
     def get_context_data(self,pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
-        context["new_object_courses"] = get_object_or_404(Courses, pk=pk)
-        context["lessons"] = Lesson.objects.filter(course=context["new_object_courses"])
-        context["teachers"] = CourseTeachers.objects.filter(course = context["new_object_courses"])
+        context["Courses"] = get_object_or_404(Courses, pk=pk)
+        context["Teachers"] = CourseTeachers.objects.filter(course=context["Courses"])
+        context["Lesson"] = Lesson.objects.filter(course=context["Courses"])
         context["current_page"] = CoursesPageView.as_view()
         return context
 

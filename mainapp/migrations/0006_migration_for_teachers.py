@@ -23,33 +23,6 @@ def forwards_func(apps, schema_editor):
         teacher.course.set([courses_list.pop(courses_list.index(choice(courses_list))) for _ in range(range_courses)])
         id_inc += 1
 
-# def forwards_func_intermediate_model(apps, schema_editor):
-#     Teacher = apps.get_model('mainapp', 'CourseTeachers')
-#     Course = apps.get_model('mainapp', 'CourseTeachers') #имеются
-#     class Intermediate(models.Model):
-#         teacher_inter = models.ForeignKey(Teacher, models.CASCADE)
-#         course_inter = models.ForeignKey(Course, models.CASCADE)
-
-    #1) создать в модели промежуточную модель
-    #2) сделать миграцию, а преподов заполнить как обычно
-
-    # faker_ = Faker('ru-RU')
-    #
-    # for i in range(1, 3):
-    #     db = faker_.date_of_birth()
-    #     teacher = Teacher.objects.create(
-    #         id = i,
-    #         name_teacher = faker_.first_name_male(),
-    #         surname_teacher = faker_.last_name_male(),
-    #         day_birth = f'{db.year}-{db.month}-{db.day}'
-    #     )
-    #     Intermediate(
-    #         teacher_inter=teacher,
-    #         course_inter=Course.objects.get(id=rINT(1, 9))
-    #     )
-
-
-
 
 def reverse_func(apps, schema_editor):
 
