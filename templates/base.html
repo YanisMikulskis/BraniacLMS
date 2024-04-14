@@ -1,3 +1,4 @@
+
 {% load static %}
 <!doctype html>
 <html lang="ru">
@@ -53,7 +54,7 @@
               <li><a href="{% url 'mainapp_namespace:test_page_for_namespace' %}">Положения &amp; Условия</a></li>
               <li><a href="#">Конфиденциальность &amp; Cookies</a></li>
               <li><a href="#">Документация по API</a></li>
-              <li><a href="doc_site.html">Документация по сайту</a></li>
+              <li><a href={% url 'mainapp_namespace:doc_page' %}>Документация по сайту</a></li>
             </ul>
           </p>
         </div>
