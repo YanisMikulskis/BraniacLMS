@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "markdownify.apps.MarkdownifyConfig",
     "mainapp",
-    "authapp"
+    "authapp", #для пользователей настрйока
 ]
 
 MIDDLEWARE = [
@@ -57,12 +57,15 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": [
+            "templates"
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.example.simple_context_processor",
@@ -103,8 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "authapp.CustomUser"
-LOGIN_REDIRECT_URL = "mainapp_namespace:main_page"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -137,6 +139,12 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-MEDIA_URL = "/media/"
 
+#для пользователей настройки
+AUTH_USER_MODEL = "authapp.CustomUser"
+LOGIN_REDIRECT_URL = "mainapp_namespace:main_page"
+LOGOUT_REDIRECT_URL = "mainapp_namespace:main_page"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+

@@ -23,13 +23,14 @@ def forwards_func(apps, schema_editor):
 
     golang_teacher = Teachers.objects.get(id=1)
     course_golang = Courses.objects.get(id=2)
-    course_golang.description = f""" На курсе Web Golang вы изучите основы Go, получите практические навыки реализации проектов 
-                      на Golang и научитесь работать в распределённых средах разработки. Вы узнаете, что такое Go, 
-                      как компилировать код Go и писать тесты. Выясните, как работает веб-сервер. Курс ведёт 
-                      {golang_teacher.name_teacher} {golang_teacher.surname_teacher} - Сертифицированный специалист 
-                      Google Developer Expert (Certified Technical Professional). Автор учебника «Веб-разработка на Go». 
-                      На курсе вы изучите основы языка программирования Go и получите практический опыт реализации 
-                      проектов на Go. """
+    course_golang.description = f""" 
+    На курсе Web Golang вы изучите основы Go, получите практические навыки реализации проектов 
+    на Golang и научитесь работать в распределённых средах разработки. Вы узнаете, что такое Go, 
+    как компилировать код Go и писать тесты. Выясните, как работает веб-сервер. Курс ведёт 
+    {golang_teacher.name_teacher} {golang_teacher.surname_teacher} - Сертифицированный специалист 
+    Google Developer Expert (Certified Technical Professional). Автор учебника «Веб-разработка на Go». 
+    На курсе вы изучите основы языка программирования Go и получите практический опыт реализации 
+    проектов на Go. """
     course_golang.save()
     #
     js_teacher_one, js_teacher_two = Teachers.objects.get(id=4), Teachers.objects.get(id=8)

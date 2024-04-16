@@ -17,7 +17,7 @@ def upload_avatar_path(instance, filename):
     return "user_{0}/avatars/{1}".format(instance.username, f"pic_{num}{suff}")
 # Create your models here.
 
-class AbstractUser(AbstractBaseUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with
     admin-compliant permissions.
