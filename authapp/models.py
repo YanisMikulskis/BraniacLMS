@@ -5,16 +5,16 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.mail import send_mail
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _ #модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
 
 
 def upload_avatar_path(instance, filename):
     # file will be uploaded to
     # MEDIA_ROOT / user_<username> / avatars / <filename>
     num = int(time() * 1000) #время с начала эпохи. Название аватарок будет исходить из этого времени
-    suff = Path(filename).suffix
-    return "user_{0}/avatars/{1}".format(instance.username, f"pic_{num}{suff}")
+    suff = Path(filename).suffix #эта штука забирает текст формата файла
+    return f'user {instance.username}/avatars/pic_{num}{suff}'
+    # return "user_{0}/avatars/{1}".format(instance.username, f"pic_{num}{suff}")
 # Create your models here.
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):

@@ -3,18 +3,17 @@ from typing import Any
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from .models import News, Courses, Lesson, CourseTeachers
-
+from django.http import HttpResponse
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
 
 
 class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['news_qs'] = News.objects.all()[:6]
-        return context
+        # context['news_qs'] = News.objects.all()[:6]
+        return HttpResponse('ТЕСТ')
 
 
 class CoursesPageView(TemplateView):
@@ -29,9 +28,10 @@ class CoursesDetailView(TemplateView):
     def get_context_data(self,pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
         context["Courses"] = get_object_or_404(Courses, pk=pk)
+
         context["Teachers"] = CourseTeachers.objects.filter(course=context["Courses"])
         context["Lesson"] = Lesson.objects.filter(course=context["Courses"])
-        context["current_page"] = CoursesPageView.as_view()
+        # context["current_page"] = CoursesPageView.as_view()
         return context
 
 
@@ -44,7 +44,7 @@ class DocSitePageView(TemplateView):
 
 
 class LoginPageView(TemplateView):
-    template_name = "mainapp/login.html"
+    template_name = "mainapp/../authapp/templates/registration/login.html"
 
 
 class TestPageView(TemplateView):
