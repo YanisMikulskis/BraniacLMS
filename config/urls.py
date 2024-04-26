@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", RedirectView.as_view(url="mainapp/")),
     path("mainapp/", include("mainapp.urls", namespace="mainapp_namespace")),
+    path("authapp/", include("authapp.urls", namespace="authapp_namespace")),
 ]
 
 if settings.DEBUG:
