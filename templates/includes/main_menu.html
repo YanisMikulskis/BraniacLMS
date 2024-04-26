@@ -25,13 +25,13 @@
             Профиль
           </a>
           <div class="dropdown-menu" aria-labelledby="ddProfile">
-            <a class="dropdown-item" href="#">Редактировать профиль</a>
+            <a class="dropdown-item" href="{% url 'authapp_namespace:profile_edit' %}">Редактировать профиль</a>
             <a class="dropdown-item" href="#">Мои курсы</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Модерация</a>
             <a class="dropdown-item" href="#">Административный раздел</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Выход</a>
+            <a class="dropdown-item" href="{% url 'authapp_namespace:logout' %}">Выход</a>
           </div>
         </li>
         <li class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:contacts_page' %}active{% endif %}">
