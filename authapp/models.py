@@ -25,9 +25,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Username and password are required. Other fields are optional.
     """
     username_validator = ASCIIUsernameValidator()
-
     username = models.CharField(
-        _('username'),
+            _('username'),
                     max_length=150,
                     unique=True,
                     help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
@@ -75,7 +74,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         """
         Return the first_name plus the last_name, with a space in between.
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = f'Student {self.first_name} {self.last_name}'
+        # full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
     def get_short_name(self):

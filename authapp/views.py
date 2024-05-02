@@ -14,21 +14,23 @@ from authapp import models
 
 class CustomLoginView(LoginView):
     def form_valid(self, form):
-        ret = super().form_valid(form)
-        message = _("Login success!<br>Hi, %(username)s") % {
-            "username": self.request.user.get_full_name()
-            if self.request.user.get_full_name()
-            else self.request.user.get_username()
-        }
+        context = super().form_valid(form)
+
+        if self.request.user.get_full_name():
+            self.name = self.request.user.get_full_name()
+        else:
+            self.name = self.request.user.get_username()
+        message = f"Login success!<br> Hello, dear {self.name}"
+
         messages.add_message(self.request, messages.INFO, mark_safe(message))
-        return ret
+        return context
 
     def form_invalid(self, form):
         for _unused, msg in form.error_messages.items():
             messages.add_message(
                 self.request,
                 messages.WARNING,
-                mark_safe(f"Something goes worng:<br>{msg}"),
+                mark_safe(f"Something goes wrong:<br>{msg}"),
             )
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -41,16 +43,15 @@ class CustomLogoutView(LogoutView):
 
 class RegisterView(TemplateView):
     template_name = "registration/register.html"
-
     def post(self, request, *args, **kwargs):
         try:
             if all(
-                (
+                    (
                     request.POST.get("username"),
                     request.POST.get("email"),
                     request.POST.get("password1"),
                     request.POST.get("password1") == request.POST.get("password2"),
-                )
+                    )
             ):
                 new_user = models.CustomUser.objects.create(
                     username=request.POST.get("username"),
@@ -68,15 +69,14 @@ class RegisterView(TemplateView):
             messages.add_message(
                 request,
                 messages.WARNING,
-                mark_safe(f"Something goes worng:<br>{exp}"),
+                mark_safe(f"Something goes wrong:<br>{exp}"),
             )
             return HttpResponseRedirect(reverse_lazy("authapp_namespace:register"))
 
 
 class ProfileEditView(LoginRequiredMixin, TemplateView):
     template_name = "registration/profile_edit.html"
-    login_url = reverse_lazy("authapp:login")
-
+    login_url = reverse_lazy("authapp_namespace:login")
     def post(self, request, *args, **kwargs):
         try:
             if request.POST.get("username"):
@@ -94,11 +94,13 @@ class ProfileEditView(LoginRequiredMixin, TemplateView):
                     os.remove(request.user.avatar.path)
                 request.user.avatar = request.FILES.get("avatar")
             request.user.save()
-            messages.add_message(request, messages.INFO, _("Saved!"))
+            messages.add_message(request, messages.INFO, _(f'Data saved!'))
         except Exception as exp:
-            messages.add_message(
-                request,
-                messages.WARNING,
-                mark_safe(f"Something goes worng:<br>{exp}"),
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 mark_safe(f'Error <br> {exp}'),
             )
-        return HttpResponseRedirect(reverse_lazy("authapp_namespace:profile_edit"))
+        return HttpResponseRedirect(reverse_lazy(f"authapp_namespace:profile_edit"))
+
+
+

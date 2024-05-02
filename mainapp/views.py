@@ -10,10 +10,11 @@ class MainPageView(TemplateView):
 
 class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['news_qs'] = News.objects.all()[:6]
-        return HttpResponse('ТЕСТ')
+        context['news_qs'] = News.objects.all()[:6]
+        return context
 class NewPageDetailView(TemplateView):
     template_name = 'mainapp/news_detail.html'
     def get_context_data(self, pk=None, **kwargs):
@@ -66,7 +67,7 @@ class ContactsPageView(TemplateView):
 
 
 class DocSitePageView(TemplateView):
-    template_name = "mainapp/test_html.html"
+    template_name = "mainapp/doc_site.html"
 
 
 class LoginPageView(TemplateView):
