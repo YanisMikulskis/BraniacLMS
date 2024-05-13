@@ -84,10 +84,3 @@ class LoginPageView(TemplateView):
 
 class TestPageView(TemplateView):
     template_name = "mainapp/test_html.html"
-
-# class MyCourses(TemplateView):
-#     template_name = "mainapp/test_html.html"
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["ALL_COURSES"] = Courses.objects.all()
-#         return context

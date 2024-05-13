@@ -12,10 +12,9 @@ urlpatterns = [
     path("page/<int:pk>/", views.NewPageDetailView.as_view(), name="detail_news"),
 
     path("courses/", views.CoursesPageView.as_view(), name="courses_page"),
-    path("courses/<int:pk>/", views.CoursesDetailView.as_view(), name = "courses_details"),
+    path("courses/<int:pk>/", views.CoursesDetailView.as_view(), name="courses_details"),
 
     path("contacts/", views.ContactsPageView.as_view(), name="contacts_page"),
     path("doc_site/", views.DocSitePageView.as_view(), name="doc_page"),
     path("test_page/", views.TestPageView.as_view(), name="test_page_for_namespace"),
-    # path("my_courses_page/", views.MyCourses.as_view(), name="my_courses")
 ]

@@ -4,11 +4,10 @@ from . import views
 from .apps import AuthappConfig
 
 from .models import CustomUser
+
 app_name = AuthappConfig.name
 
 from django.http import HttpResponse
-
-
 
 urlpatterns = [
     path("login/", views.CustomLoginView.as_view(), name="login"),
