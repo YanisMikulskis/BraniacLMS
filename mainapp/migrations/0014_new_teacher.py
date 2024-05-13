@@ -17,9 +17,10 @@ def forwards_func(apps, schema_editor):
         day_birth=f'{db.year}-{db.month}-{db.day}'
     )
     teacher.course.set([courses_list.pop(courses_list.index(choice(courses_list))) for _ in range(2)])
-def reverser_func(apps, schema_editor):
+def reverse_func(apps, schema_editor):
+    ...
     Teacher = apps.get_model('mainapp', 'CourseTeachers')
-    Teacher.objects.all()[-1].delete()
+    Teacher.objects.get(id=8).delete()
 
 class Migration(migrations.Migration):
 
@@ -30,6 +31,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(
             forwards_func,
-            reverser_func
+            reverse_func
         )
     ]

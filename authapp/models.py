@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _ #модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
 
-
+from mainapp.models import Courses
 def upload_avatar_path(instance, filename):
     # file will be uploaded to
     # MEDIA_ROOT / user_<username> / avatars / <filename>
@@ -19,7 +19,7 @@ def upload_avatar_path(instance, filename):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
-    An abstract base class implementing a fully featured User model with
+    An abstract base class implementing a  fully featured User model with
     admin-compliant permissions.
 
     Username and password are required. Other fields are optional.
@@ -40,6 +40,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     age = models.PositiveIntegerField(blank=True, null=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, blank=True, null=True)
     email = models.EmailField(_('email address'), blank=True)
+    # purchased_courses = models.CharField(_('purchased_courses'), max_length=400, blank=True, null=True)
+    purchased_courses = models.ManyToManyField(Courses)
     is_staff = models.BooleanField(
                 _('staff status'),
                 default=False,

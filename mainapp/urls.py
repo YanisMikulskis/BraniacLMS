@@ -17,4 +17,5 @@ urlpatterns = [
     path("contacts/", views.ContactsPageView.as_view(), name="contacts_page"),
     path("doc_site/", views.DocSitePageView.as_view(), name="doc_page"),
     path("test_page/", views.TestPageView.as_view(), name="test_page_for_namespace"),
+    # path("my_courses_page/", views.MyCourses.as_view(), name="my_courses")
 ]

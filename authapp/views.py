@@ -9,7 +9,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
+from django.http import HttpResponse
 from authapp import models
+from .models import CustomUser
+
+from mainapp.models import Courses
 
 
 class CustomLoginView(LoginView):
@@ -43,21 +47,22 @@ class CustomLogoutView(LogoutView):
 
 class RegisterView(TemplateView):
     template_name = "registration/register.html"
+
     def post(self, request, *args, **kwargs):
         try:
             if all(
                     (
-                    request.POST.get("username"),
-                    request.POST.get("email"),
-                    request.POST.get("password1"),
-                    request.POST.get("password1") == request.POST.get("password2"),
+                            request.POST.get("username"),
+                            request.POST.get("email"),
+                            request.POST.get("password1"),
+                            request.POST.get("password1") == request.POST.get("password2"),
                     )
             ):
                 new_user = models.CustomUser.objects.create(
                     username=request.POST.get("username"),
                     first_name=request.POST.get("first_name"),
                     last_name=request.POST.get("last_name"),
-                    age=request.POST.get("age") if request.POST.get("age") else 0,
+                    age=request.POST.get("age") if request.POST.get("age") else f'Скрыт',
                     avatar=request.FILES.get("avatar"),
                     email=request.POST.get("email"),
                 )
@@ -77,6 +82,7 @@ class RegisterView(TemplateView):
 class ProfileEditView(LoginRequiredMixin, TemplateView):
     template_name = "registration/profile_edit.html"
     login_url = reverse_lazy("authapp_namespace:login")
+
     def post(self, request, *args, **kwargs):
         try:
             if request.POST.get("username"):
@@ -99,8 +105,50 @@ class ProfileEditView(LoginRequiredMixin, TemplateView):
             messages.add_message(request,
                                  messages.WARNING,
                                  mark_safe(f'Error <br> {exp}'),
-            )
+                                 )
         return HttpResponseRedirect(reverse_lazy(f"authapp_namespace:profile_edit"))
 
 
+#
+class RemoveCourse(TemplateView):
+    template_name = "courses/remove_course.html"
 
+    def remove_course(self, pk):
+        self.current_course = Courses.objects.get(id=pk)
+        self.current_user.purchased_courses.remove(self.current_course)
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(pk=pk, **kwargs)
+        self.current_user = CustomUser.objects.get(id=self.request.user.id)
+        self.remove_course(pk)
+        context['remove_course'] = self.current_course
+        return context
+
+
+class MyCourses(TemplateView):
+    template_name = "courses/my_courses.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(pk=pk, **kwargs)
+        self.current_user = CustomUser.objects.get(id=self.request.user.id)
+        my_courses = self.current_user.purchased_courses.all()
+        context['my_courses'] = my_courses
+        return context
+
+
+class Add_Courses(TemplateView):
+    template_name = "courses/add_courses_info.html"
+
+    def add(self, id_course):
+        request = self.request
+        self.current_user = CustomUser.objects.get(id=request.user.id)
+        self.current_curse = Courses.objects.get(id=id_course)
+        self.current_user.purchased_courses.add(self.current_curse)
+        self.all_courses = self.current_user.purchased_courses.all()
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(pk=pk, **kwargs)
+        self.add(pk)
+        context['current_user'] = self.current_user
+        context['courses_user'] = self.current_curse.name
+        return context
