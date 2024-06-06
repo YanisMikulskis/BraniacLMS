@@ -22,14 +22,10 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", RedirectView.as_view(url="mainapp/")),
-<<<<<<< HEAD
-    path("mainapp/", include("mainapp.urls", namespace="mainapp_namespace")),
-=======
     path("social_auth/", include("social_django.urls", namespace="social")),
     path("mainapp/", include("mainapp.urls", namespace="mainapp_namespace")),
     path("authapp/", include("authapp.urls", namespace="authapp_namespace")),
 
->>>>>>> lesson_5
 ]
 
 if settings.DEBUG:
