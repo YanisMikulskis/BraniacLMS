@@ -2,26 +2,29 @@
 
 from django.db import migrations
 
+
 def forwards_func(apps, schema_editor):
     News = apps.get_model('mainapp', 'News')
     DataTransfer = apps.get_model('mainapp', 'DataTransfer')
     for i in range(1, len(News.objects.all()) + 1):
         DataTransfer.objects.create(
-        id = i,
-        title_transfer=News.objects.get(id=i).title,
-        preambule_transfer = News.objects.get(id=i).preambule,
-        body_transfer = News.objects.get(id=i).body,
-        body_as_markdown_transfer = News.objects.get(id=i).body_as_markdown,
-        created_transfer = News.objects.get(id=i).created,
-        updated_transfer = News.objects.get(id=i).updated,
-        deleted_transfer = News.objects.get(id=i).deleted
+            id=i,
+            title_transfer=News.objects.get(id=i).title,
+            preambule_transfer=News.objects.get(id=i).preambule,
+            body_transfer=News.objects.get(id=i).body,
+            body_as_markdown_transfer=News.objects.get(id=i).body_as_markdown,
+            created_transfer=News.objects.get(id=i).created,
+            updated_transfer=News.objects.get(id=i).updated,
+            deleted_transfer=News.objects.get(id=i).deleted
         )
+
 
 def reverse_func(apps, schema_editor):
     DataTransfer = apps.get_model('mainapp', 'DataTransfer')
     DataTransfer.objects.all().delete()
-class Migration(migrations.Migration):
 
+
+class Migration(migrations.Migration):
     dependencies = [
         ('mainapp', '0009_datatransfer'),
     ]

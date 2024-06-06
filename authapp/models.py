@@ -5,16 +5,21 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.mail import send_mail
 from django.db import models
-from django.utils.translation import gettext_lazy as _ #модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
+from django.utils.translation import \
+    gettext_lazy as _  # модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
 
 from mainapp.models import Courses
+
+
 def upload_avatar_path(instance, filename):
     # file will be uploaded to
     # MEDIA_ROOT / user_<username> / avatars / <filename>
-    num = int(time() * 1000) #время с начала эпохи. Название аватарок будет исходить из этого времени
-    suff = Path(filename).suffix #эта штука забирает текст формата файла
+    num = int(time() * 1000)  # время с начала эпохи. Название аватарок будет исходить из этого времени
+    suff = Path(filename).suffix  # эта штука забирает текст формата файла
     return f'user {instance.username}/avatars/pic_{num}{suff}'
     # return "user_{0}/avatars/{1}".format(instance.username, f"pic_{num}{suff}")
+
+
 # Create your models here.
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -26,13 +31,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     username_validator = ASCIIUsernameValidator()
     username = models.CharField(
-            _('username'),
-                    max_length=150,
-                    unique=True,
-                    help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-                    validators=[username_validator],
-                    error_messages={
-                        'unique': _("A user with that username already exists."),
+        _('username'),
+        max_length=150,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[username_validator],
+        error_messages={
+            'unique': _("A user with that username already exists."),
         },
     )
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
@@ -43,19 +48,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # purchased_courses = models.CharField(_('purchased_courses'), max_length=400, blank=True, null=True)
     purchased_courses = models.ManyToManyField(Courses)
     is_staff = models.BooleanField(
-                _('staff status'),
-                default=False,
-                help_text=_('Designates whether the user can log into this admin site.'),
+        _('staff status'),
+        default=False,
+        help_text=_('Designates whether the user can log into this admin site.'),
     )
     is_active = models.BooleanField(
-                _('active'),
-                default=True,
-                help_text=_(
-                    'Designates whether this user should be treated as active. '
-                    'Unselect this instead of deleting accounts.'
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), auto_now_add = True)
+    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     objects = UserManager()
 
@@ -66,7 +71,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
-
 
     def clean(self):
         super().clean()
@@ -85,5 +89,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
+        """ Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)

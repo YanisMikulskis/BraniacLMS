@@ -1,7 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.conf import settings
-
+from django.utils.translation import gettext_lazy as _
 
 class News(models.Model):
     title = models.CharField(max_length=256, verbose_name='Title_verbose')
@@ -18,7 +18,10 @@ class News(models.Model):
     def delete(self, *args):
         self.deleted = True
         self.save()
-
+    class Meta:
+        verbose_name = _('News')
+        verbose_name_plural = _('News')
+        ordering = ('-created',)
 
 class Courses(models.Model):
     name = models.CharField(max_length=256, verbose_name='name')
