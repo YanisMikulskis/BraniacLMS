@@ -13,42 +13,22 @@
       <ul class="navbar-nav mr-auto">
         <li
           class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:news_page' or request.resolver_match.view_name == 'mainapp_namespace:news_paginator' %}active{% endif %}">
-<<<<<<< HEAD
-          <a class="nav-link" href="{% url 'mainapp_namespace:news_page' %}">Новости</a>
-=======
           <a class="nav-link" href="{% url 'mainapp_namespace:news_paginator' page=1 %}">Новости</a>
->>>>>>> lesson_5
         </li>
         <li
           class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:courses_page' %}active{% endif %}">
           <a class="nav-link" href="{% url 'mainapp_namespace:courses_page' %}">Курсы</a>
-<<<<<<< HEAD
-        </li>
-        <li class="nav-item dropdown">
-=======
 
         </li>
 
         {% if user.is_authenticated %}
 
             <li class="nav-item dropdown">
->>>>>>> lesson_5
           <a class="nav-link dropdown-toggle" href="#" id="ddProfile" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
             Профиль
           </a>
           <div class="dropdown-menu" aria-labelledby="ddProfile">
-<<<<<<< HEAD
-            <a class="dropdown-item" href="#">Редактировать профиль</a>
-            <a class="dropdown-item" href="#">Мои курсы</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Модерация</a>
-            <a class="dropdown-item" href="#">Административный раздел</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Выход</a>
-          </div>
-        </li>
-=======
             <a class="dropdown-item" href="{% url 'authapp_namespace:profile_edit' %}">Редактировать профиль</a>
             <a class="dropdown-item" href="{% url 'authapp_namespace:view_courses' %}">Мои курсы</a>
             <div class="dropdown-divider"></div>
@@ -73,7 +53,6 @@
         </li>
       {% endif %}
 
->>>>>>> lesson_5
         <li class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:contacts_page' %}active{% endif %}">
           <a class="nav-link" href="{% url 'mainapp_namespace:contacts_page' %}">Контакты</a>
         </li>
