@@ -5,8 +5,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.mail import send_mail
 from django.db import models
-from django.utils.translation import \
-    gettext_lazy as _  # модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
+from django.utils.translation import gettext_lazy as _  # модуль для перевода на дргие языки (оставляем, если хотим многоязычность)
 
 from mainapp.models import Courses
 
