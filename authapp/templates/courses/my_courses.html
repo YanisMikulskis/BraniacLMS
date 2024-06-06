@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="display-4">Ваши курсы <br></h1>
+    <div class="jumbotron">
+    {% if my_courses %}
+        {% for course in my_courses %}
+        <h1 class="display-4">Курс {{ course.name }}<br></h1>
+            <a href="{% url 'authapp_namespace:remove_course' pk=course.pk %}" class="btn"
+                    role="button">Удалить курс из списка</a>
+
+        {% endfor %}
+        <p class="lead">
+        </p>
+    {% else %}
+        <h1 class="display-4">Курсы отсутствуют<br></h1>
+    {% endif %}
+    <a href="{% url 'mainapp_namespace:courses_page' %}" class="btn btn-outline-primary btn-block"
+                role="button">Назад к списку курсов</a>
+  </div>
+
+{% endblock content %}

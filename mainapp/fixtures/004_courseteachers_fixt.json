@@ -1,0 +1,114 @@
+[
+{
+  "model": "mainapp.courseteachers",
+  "pk": 1,
+  "fields": {
+    "name_teacher": "Иван",
+    "surname_teacher": "Иванов",
+    "day_birth": "1990-07-10",
+    "deleted": false,
+    "course": [
+      1,
+      4
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 2,
+  "fields": {
+    "name_teacher": "Дмитрий",
+    "surname_teacher": "Петров",
+    "day_birth": "1988-02-04",
+    "deleted": false,
+    "course": [
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 3,
+  "fields": {
+    "name_teacher": "Андрей",
+    "surname_teacher": "Сидоров",
+    "day_birth": "1981-12-08",
+    "deleted": false,
+    "course": [
+      3,
+      8
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 4,
+  "fields": {
+    "name_teacher": "Василий",
+    "surname_teacher": "Скрипунов",
+    "day_birth": "1983-05-16",
+    "deleted": false,
+    "course": [
+      3,
+      8
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 5,
+  "fields": {
+    "name_teacher": "Аркадий",
+    "surname_teacher": "Изосимов",
+    "day_birth": "1986-05-09",
+    "deleted": false,
+    "course": [
+      3,
+      8
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 6,
+  "fields": {
+    "name_teacher": "Павел",
+    "surname_teacher": "Буланов",
+    "day_birth": "1971-01-07",
+    "deleted": false,
+    "course": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 7,
+  "fields": {
+    "name_teacher": "Виктор",
+    "surname_teacher": "Комиссаров",
+    "day_birth": "1990-08-25",
+    "deleted": false,
+    "course": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "mainapp.courseteachers",
+  "pk": 8,
+  "fields": {
+    "name_teacher": "Александр",
+    "surname_teacher": "Никулин",
+    "day_birth": "1990-08-25",
+    "deleted": false,
+    "course": [
+      3,
+      8
+    ]
+  }
+}
+]

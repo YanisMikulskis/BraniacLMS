@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<<<<<<< HEAD
 
   <div class="row justify-content-center mt-3">
 
@@ -10,10 +11,24 @@
         <img src="{% static 'img/course001.jpg' %}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title text-center">Web Python</h5>
+=======
+
+
+<div class="row justify-content-center mt-3">
+
+    {% for elem in Courses %}
+
+    <div class="card col-sm-12 col-md-6 col-lg-4 border-0">
+      <a href="{% url 'mainapp_namespace:courses_details' pk=elem.pk %}">
+        <img src="{% static elem.cover %}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ elem.name }}</h5>
+>>>>>>> lesson_5
         </div>
       </a>
     </div>
 
+<<<<<<< HEAD
 
 
     <div class="card col-sm-12 col-md-6 col-lg-4 border-0">
@@ -80,6 +95,11 @@
       </a>
     </div>
 
+=======
+    {% endfor %}
+
+
+>>>>>>> lesson_5
 
   </div>
   <div class="row justify-content-center align-items-center mt-3 mb-n3">
