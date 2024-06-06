@@ -56,13 +56,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-<<<<<<< HEAD
-        "DIRS": ["templates"],
-=======
         "DIRS": [
             "templates"
         ],
->>>>>>> lesson_5
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -72,11 +68,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.example.simple_context_processor",
-<<<<<<< HEAD
-=======
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect"
->>>>>>> lesson_5
             ],
         },
     },
