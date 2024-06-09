@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from .models import News, Courses, Lesson, CourseTeachers
 from django.http import HttpResponse
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 
 class MainPageView(TemplateView):
@@ -57,4 +59,31 @@ class CoursesPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['Courses'] = Courses.objects.all()
         return context
+
+
+class CoursesDetailView(TemplateView):
+    template_name = "mainapp/courses_detail.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(pk=pk, **kwargs)
+        context["Courses"] = get_object_or_404(Courses, pk=pk)
+        context["Teachers"] = CourseTeachers.objects.filter(course=context["Courses"])
+        context["Lesson"] = Lesson.objects.filter(course=context["Courses"])
+        return context
+
+
+class ContactsPageView(TemplateView):
+    template_name = "mainapp/contacts.html"
+
+
+class DocSitePageView(TemplateView):
+    template_name = "mainapp/doc_site.html"
+
+
+class LoginPageView(TemplateView):
+    template_name = "authapp/templates/registration/login.html"
+
+
+class TestPageView(TemplateView):
+    template_name = "mainapp/test_html.html"
 

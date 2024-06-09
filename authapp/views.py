@@ -126,7 +126,10 @@ class RemoveCourse(TemplateView):
 
 
 class MyCourses(TemplateView):
-    template_name = "courses/my_courses.html"
+    # template_name = "courses/my_courses.html"
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.template_name = "courses/my_courses.html"
 
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
@@ -138,17 +141,36 @@ class MyCourses(TemplateView):
 
 class Add_Courses(TemplateView):
     template_name = "courses/add_courses_info.html"
-
     def add(self, id_course):
         request = self.request
         self.current_user = CustomUser.objects.get(id=request.user.id)
-        self.current_curse = Courses.objects.get(id=id_course)
-        self.current_user.purchased_courses.add(self.current_curse)
+        self.current_course = Courses.objects.get(id=id_course)
         self.all_courses = self.current_user.purchased_courses.all()
+        if self.current_course not in self.all_courses:
+            self.current_user.purchased_courses.add(self.current_course)
+            return True
+        else:
+            return False
+
+    # def get_template_names(self, *template):
+    #     # if self.result_add:
+    #     if not self.temp:
+    #         return ['courses/add_courses_info.html']
+    #     else:
+    #         return ['registration/profile_edit.html']
+
+    # 'courses/my_courses.html'
 
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
-        self.add(pk)
-        context['current_user'] = self.current_user
-        context['courses_user'] = self.current_curse.name
-        return context
+        self.result_add = self.add(pk)
+        context['result_add'] = self.result_add
+        if self.result_add:
+            context['current_user'] = self.current_user
+            context['courses_user'] = self.current_course.name
+            return context
+        else:
+            message = 'Этот курс уже добавлен! Зайдите в "Мои курсы".'
+            messages.add_message(self.request, messages.WARNING, mark_safe(message))
+
+

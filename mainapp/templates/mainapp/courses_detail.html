@@ -9,11 +9,9 @@
     <div class="col-sm-12 col-md-6 col-lg-8 order-2 order-md-1">
         <div class="row h-100">
             <div class="col-12">
-{#                {% if Courses.description_as_markdown %}#}
-{#                    {{ Courses.description|markdownify }}#}
-{#                {% else %}#}
+
                  {{ Courses.description }}
-{#                {% endif %}#}
+
             </div>
 
             <div class="col-12 align-self-end">
@@ -36,10 +34,20 @@
                 <small class="text-uppercase">цена</small><br> <span style="font-size: 30pt;">
                     {{ Courses.cost }}
                 </span><br>
-{#                    <a href="{% url 'authapp_namespace:add_courses' course_pk=Courses.pk %}"#}
+                {% if user.is_authenticated %}
+                    {% if user.purchased_courses %}
+                        <small class="text-uppercase">{{ user.purchased_courses.objects.all }}</small><br>
                     <a href="{% url 'authapp_namespace:add_course' pk=Courses.pk %}"
                        class="btn btn-outline-primary btn-block"
                         role="button">Купить</a>
+                        {% endif %}
+
+
+                {% else %}
+
+                    <a href="{% url 'authapp_namespace:add_course' pk=Courses.pk %}" class="btn btn-outline-primary btn-block"
+                        role="button">Купить (вы не вошли!)</a>
+                {% endif %}
                 </p>
             </div>
         </div>
@@ -87,3 +95,17 @@
 {% endfor %}
 </div>
 {% endblock content %}
+
+{% block js %}
+  <script>
+    $(document).ready(function () {
+
+      {% if messages %}
+      // Toasts
+      $(".toast").toast({ delay: 5000 });
+      $(".toast").toast("show");
+      {% endif %}
+
+    });
+  </script>
+  {% endblock js %}

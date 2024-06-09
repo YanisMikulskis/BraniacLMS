@@ -1,9 +1,16 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
 
     <div class="jumbotron">
-    <h1 class="display-4">Поздравляем {{ current_user }}! Курс по {{ courses_user }} приобретен.</h1>
+    {% if result_add %}
+
+        <h1 class="display-4">Поздравляем {{ current_user }}! Курс по {{ courses_user }} приобретен.</h1>
+    {% elif not result_add %}
+        <h1 class="display-4">Этот курс уже добавлен!.</h1>
+
+    {% endif %}
     <p class="lead">
     </p>
     <a href="{% url 'mainapp_namespace:courses_page' %}" class="btn btn-outline-primary btn-block"
