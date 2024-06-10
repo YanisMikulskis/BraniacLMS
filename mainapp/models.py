@@ -40,6 +40,12 @@ class Courses(models.Model):
         self.deleted = True
         self.save()
 
+    class Meta:
+        verbose_name = _('Courses')
+        verbose_name_plural = verbose_name
+        ordering=['pk']
+
+
 
 class Lesson(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
@@ -76,6 +82,10 @@ class CourseTeachers(models.Model):
         self.deleted = True
         self.save()
 
+    class Meta:
+        verbose_name = _('CourseTeachers')
+        verbose_name_plural = verbose_name
+        ordering = ['pk']
 
 class Intermediate(models.Model):
     teacher_inter = models.ForeignKey(to=CourseTeachers, on_delete=models.CASCADE)

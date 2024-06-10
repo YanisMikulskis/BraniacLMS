@@ -6,5 +6,19 @@ from . import models as mainapp_models
 class NewsAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(mainapp_models.Courses)
+class CoursesAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(mainapp_models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(mainapp_models.CourseTeachers)
+class CourseTeachersAdmin(admin.ModelAdmin):
+    pass
+
+
 
 
