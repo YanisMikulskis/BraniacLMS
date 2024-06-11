@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "social_django",
     "mainapp",
     "authapp",  # для пользователей настрйока
+    "crispy_forms"
 ]
 
 MIDDLEWARE = [

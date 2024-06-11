@@ -1,16 +1,18 @@
 import os
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 
 from django.http import HttpResponse
-from authapp import models
+from authapp import models, forms
+
 from .models import CustomUser
 
 from mainapp.models import Courses
@@ -45,7 +47,12 @@ class CustomLogoutView(LogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RegisterView(TemplateView):
+class RegisterView(CreateView):
+    model = get_user_model()
+    form_class = forms.CustomUserCreationForm
+    success_url = reverse_lazy("mainapp_namespace:main_page")
+
+
     template_name = "registration/register.html"
 
     def post(self, request, *args, **kwargs):
