@@ -1,6 +1,8 @@
 import os
 
 from django.contrib import messages
+from django.contrib.auth import logout, login
+from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -19,13 +21,16 @@ from mainapp.models import Courses
 
 
 class CustomLoginView(LoginView):
+
     def form_valid(self, form):
         context = super().form_valid(form)
-
-        if self.request.user.get_full_name():
-            self.name = self.request.user.get_full_name()
+        if not self.request.user.is_superuser:
+            if self.request.user.get_full_name():
+                self.name = self.request.user.get_full_name()
+            else:
+                self.name = self.request.user.get_username()
         else:
-            self.name = self.request.user.get_username()
+            self.name = 'ROOT!'
         message = f"Login success!<br> Hello, dear {self.name}"
 
         messages.add_message(self.request, messages.INFO, mark_safe(message))
@@ -40,11 +45,15 @@ class CustomLoginView(LoginView):
             )
         return self.render_to_response(self.get_context_data(form=form))
 
+def logout_view(request):
 
-class CustomLogoutView(LogoutView):
-    def dispatch(self, request, *args, **kwargs):
-        messages.add_message(self.request, messages.INFO, _("See you later!"))
-        return super().dispatch(request, *args, **kwargs)
+    name_user = request.user if not request.user.is_superuser else 'ROOT!'
+
+    message = f'See you later, dear {name_user}'
+    messages.add_message(request, messages.INFO, mark_safe(message))
+    logout(request)
+    return redirect('/')
+
 
 
 class RegisterView(CreateView):

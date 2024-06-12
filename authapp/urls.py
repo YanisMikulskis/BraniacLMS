@@ -11,7 +11,7 @@ from django.http import HttpResponse
 
 urlpatterns = [
     path("login/", views.CustomLoginView.as_view(), name="login"),
-    path("logout/", views.CustomLogoutView.as_view(), name="logout"),
+    path("logout/", views.logout_view, name="logout"),
     path("register/", views.RegisterView.as_view(), name="register"),
     path("profile_edit/", views.ProfileEditView.as_view(), name="profile_edit"),
     path("my_courses/", views.MyCourses.as_view(), name="view_courses"),
