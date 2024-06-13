@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
-
+from django.utils.translation import gettext_lazy as _
 
 class CustomUserCreationForm(UserCreationForm):
     field_order = [
@@ -19,8 +19,8 @@ class CustomUserCreationForm(UserCreationForm):
         fields = (
             "username",
             "email",
-            "first_name",
             "last_name",
+            "first_name",
             "age",
             "avatar",
         )

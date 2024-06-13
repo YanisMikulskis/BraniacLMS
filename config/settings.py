@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "social_django",
     "mainapp",
     "authapp",  # для пользователей настрйока
-    "crispy_forms"
+    "crispy_forms",
+    "crispy_bootstrap4"
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,4 @@ LOGOUT_REDIRECT_URL = "mainapp_namespace:main_page"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
