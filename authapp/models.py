@@ -41,8 +41,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    age = models.PositiveIntegerField(blank=True, null=True)
-    avatar = models.ImageField(upload_to=upload_avatar_path, blank=True, null=True)
+
+    age = models.PositiveIntegerField(verbose_name='Возраст', blank=True, null=True)
+    avatar = models.ImageField(verbose_name='Фото в профиль', upload_to=upload_avatar_path, blank=True, null=True)
     email = models.EmailField(_('email address'), blank=True)
     # purchased_courses = models.CharField(_('purchased_courses'), max_length=400, blank=True, null=True)
     purchased_courses = models.ManyToManyField(Courses)

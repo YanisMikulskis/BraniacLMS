@@ -3,18 +3,17 @@ import os
 from django.contrib import messages
 from django.contrib.auth import logout, login, get_user_model
 from django.shortcuts import redirect
-
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 
 from django.http import HttpResponse
 from authapp import models, forms
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from .models import CustomUser
 
@@ -63,67 +62,18 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("mainapp_namespace:main_page")
 
 
-    # template_name = "registration/register.html"
+class ProfileEditView(UserPassesTestMixin, UpdateView):
+    model = get_user_model()
+    form_class = CustomUserChangeForm
+
+
+    def test_func(self):
+        return True if self.request.user.pk == self.kwargs.get("pk") else False
     #
-    # def post(self, request, *args, **kwargs):
-    #     try:
-    #         if all(
-    #                 (
-    #                         request.POST.get("username"),
-    #                         request.POST.get("email"),
-    #                         request.POST.get("password1"),
-    #                         request.POST.get("password1") == request.POST.get("password2"),
-    #                 )
-    #         ):
-    #             new_user = models.CustomUser.objects.create(
-    #                 username=request.POST.get("username"),
-    #                 first_name=request.POST.get("first_name"),
-    #                 last_name=request.POST.get("last_name"),
-    #                 age=request.POST.get("age") if request.POST.get("age") else f'Скрыт',
-    #                 avatar=request.FILES.get("avatar"),
-    #                 email=request.POST.get("email"),
-    #             )
-    #             new_user.set_password(request.POST.get("password1"))
-    #             new_user.save()
-    #             messages.add_message(request, messages.INFO, _("Registration success!"))
-    #             return HttpResponseRedirect(reverse_lazy("authapp_namespace:login"))
-    #     except Exception as exp:
-    #         messages.add_message(
-    #             request,
-    #             messages.WARNING,
-    #             mark_safe(f"Something goes wrong:<br>{exp}"),
-    #         )
-    #         return HttpResponseRedirect(reverse_lazy("authapp_namespace:register"))
+    def get_success_url(self):
+        return reverse_lazy("authapp_namespace:profile_edit", args=[self.request.user.pk])
 
 
-class ProfileEditView(LoginRequiredMixin, TemplateView):
-    template_name = "registration/profile_edit.html"
-    login_url = reverse_lazy("authapp_namespace:login")
-
-    def post(self, request, *args, **kwargs):
-        try:
-            if request.POST.get("username"):
-                request.user.username = request.POST.get("username")
-            if request.POST.get("first_name"):
-                request.user.first_name = request.POST.get("first_name")
-            if request.POST.get("last_name"):
-                request.user.last_name = request.POST.get("last_name")
-            if request.POST.get("age"):
-                request.user.age = request.POST.get("age")
-            if request.POST.get("email"):
-                request.user.email = request.POST.get("email")
-            if request.FILES.get("avatar"):
-                if request.user.avatar and os.path.exists(request.user.avatar.path):
-                    os.remove(request.user.avatar.path)
-                request.user.avatar = request.FILES.get("avatar")
-            request.user.save()
-            messages.add_message(request, messages.INFO, _(f'Data saved!'))
-        except Exception as exp:
-            messages.add_message(request,
-                                 messages.WARNING,
-                                 mark_safe(f'Error <br> {exp}'),
-                                 )
-        return HttpResponseRedirect(reverse_lazy(f"authapp_namespace:profile_edit"))
 
 
 #
@@ -169,14 +119,6 @@ class Add_Courses(TemplateView):
         else:
             return False
 
-    # def get_template_names(self, *template):
-    #     # if self.result_add:
-    #     if not self.temp:
-    #         return ['courses/add_courses_info.html']
-    #     else:
-    #         return ['registration/profile_edit.html']
-
-    # 'courses/my_courses.html'
 
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
