@@ -4,13 +4,13 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 class News(models.Model):
-    title = models.CharField(max_length=256, verbose_name='Title_verbose')
-    preambule = models.CharField(max_length=1024, verbose_name='Preambule_verbose')
-    body = models.TextField(blank=True, null=True, verbose_name='Body_verbose')
-    body_as_markdown = models.BooleanField(default=False, verbose_name='As markdown verbose')
+    title = models.CharField(max_length=256, verbose_name=_('Заголовок новости'))
+    preambule = models.CharField(max_length=1024, verbose_name=_('Описание новости'))
+    body = models.TextField(blank=True, null=True, verbose_name=_('Текст новости'))
+    body_as_markdown = models.BooleanField(default=False, verbose_name='Разметка markdown')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Created verbose', editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name='Update_verbose', editable=False)
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField(verbose_name='Удаленная новость', default=False)
 
     def __str__(self):
         return f'{self.pk}  {self.title}'

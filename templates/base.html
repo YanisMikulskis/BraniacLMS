@@ -59,7 +59,7 @@
         <p>
         <ul class="list-unstyled">
           <li><a href="{% url 'mainapp_namespace:main_page' %}">Домашняя</a></li>
-          <li><a href="{% url 'mainapp_namespace:news_paginator' page=1 %}">Новости</a></li>
+          <li><a href="{% url 'mainapp_namespace:news_list' %}">Новости</a></li>
           {% if user.is_authenticated %}
           <li><a href="{% url 'authapp_namespace:logout' %}">Выйти</a></li>
           {% else %}
