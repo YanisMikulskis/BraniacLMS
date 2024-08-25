@@ -4,9 +4,12 @@ from django.contrib import admin
 from . import models as mainapp_models
 @admin.register(mainapp_models.News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ['title', 'preambule', 'body']
+    list_display = ['title', 'preambule', 'body', 'created', 'updated']
     search_fields = ['title', 'preambule', 'body']
+    list_filter = ['updated']
 
+
+    # actions = ['Mark deleted']
 @admin.register(mainapp_models.Courses)
 class CoursesAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'cost', 'cover', 'deleted']
@@ -14,6 +17,7 @@ class CoursesAdmin(admin.ModelAdmin):
 @admin.register(mainapp_models.Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_course_name', 'num', 'title', 'deleted']
+
     ordering = ['-course__name', '-num']
     list_per_page = 5
     list_filter = ['course', 'created', 'deleted']

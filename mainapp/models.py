@@ -2,7 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth import get_user_model
 class News(models.Model):
     title = models.CharField(max_length=256, verbose_name=_('Заголовок новости'))
     preambule = models.CharField(max_length=1024, verbose_name=_('Описание новости'))
@@ -65,6 +65,8 @@ class Lesson(models.Model):
         self.save()
 
     class Meta:
+        verbose_name = _('Lesson')
+        verbose_name_plural = _('Lessons')
         ordering = ('course', 'num')
 
 
@@ -112,3 +114,22 @@ class DataTransfer(models.Model):
         self.deleted_transfer = True
         self.save()
 
+class CourseFeedback(models.Model):
+    RATING = ((5, "Отлично"),
+              (4, "Хорошо"),
+              (3, "Удовлетворительно"),
+              (2, "Плохо"),
+              (1, "Очень плохо"))
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name=_('Course'))
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name=_('User'))
+    feedback = models.TextField(default=_('No feedback'), verbose_name=_('Feedback'))
+    rating = models.SmallIntegerField(choices=RATING, default=5, verbose_name=_('Rating'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Created')
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.course} ({self.user})'
+
+
+class TestTable(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Test_name')
