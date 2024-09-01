@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{#{% load static %}#}
+{% block content %}
+    <style>
+    #change_course {
+		display: block;
+        color: #1f8c22;
+
+	}
+    </style>
+    <li class="active" xmlns="http://www.w3.org/1999/html">
+        <a href="#courseSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Курсы</a>
+        <ul class="collapse list-unstyled" id="courseSubmenu">
+
+
+        <select id="select_course">
+            {% for item in Courses %}
+                <option value="{{ item.id }}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+        <button id="button_course">Изменить выбранный курс</button>
+
+    <script>
+    document.getElementById('button_course').addEventListener('click', function() {
+        var selectedOptionCourse = document.getElementById('select_course').value;  // Получение id выбранного варианта
+        if (selectedOptionCourse) {  // Проверяем, что выбран вариант
+            // Переход на страницу настроек для выбранного варианта
+            window.location.href = '/selfadminapp/course/' + selectedOptionCourse + '/update';
+        } else {
+            alert('Пожалуйста, выберите вариант перед переходом.');
+        }
+    });
+    </script>
+
+
+        </ul>
+
+        </li>
+
+
+    <li class="active" xmlns="http://www.w3.org/1999/html">
+        <a href="#newsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Новости</a>
+        <ul class="collapse list-unstyled" id="newsSubmenu">
+
+        <select id="select_news">
+            {% for news in News %}
+                <option value="{{ news.id }}">{{ news.title }}</option>
+            {% endfor %}
+        </select>
+        <button id="button_news">Изменить выбранную новость</button>
+
+        <script>
+        document.getElementById('button_news').addEventListener('click', function() {
+            var selectedOptionNews = document.getElementById('select_news').value;  // Получение id выбранного варианта
+            if (selectedOptionNews) {  // Проверяем, что выбран вариант
+                // Переход на страницу настроек для выбранного варианта
+                window.location.href = '/selfadminapp/news/' + selectedOptionNews + '/update';
+            } else {
+                alert('Пожалуйста, выберите вариант перед переходом.');
+            }
+        });
+        </script>
+
+
+
+         </ul>
+    </li>
+
+
+
+
+    <li class="active" xmlns="http://www.w3.org/1999/html">
+        <a href="#teacherSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Преподаватели</a>
+        <ul class="collapse list-unstyled" id="teacherSubmenu">
+
+        <select id="select_teacher">
+            {% for teacher in CourseTeachers %}
+                <option value="{{ teacher.id }}">{{ teacher.name_teacher }}</option>
+            {% endfor %}
+        </select>
+        <button id="button_teacher">Изменить данные преподавателя</button>
+
+        <script>
+        document.getElementById('button_teacher').addEventListener('click', function() {
+            var selectedOptionTeachers = document.getElementById('select_teacher').value;  // Получение id выбранного варианта
+            if (selectedOptionTeachers) {  // Проверяем, что выбран вариант
+                // Переход на страницу настроек для выбранного варианта
+                window.location.href = '/selfadminapp/teacher/' + selectedOptionTeachers + '/update';
+            } else {
+                alert('Пожалуйста, выберите вариант перед переходом.');
+            }
+        });
+        </script>
+
+
+
+         </ul>
+    </li>
+
+{% endblock content %}

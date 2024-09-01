@@ -110,7 +110,6 @@ class CoursesDetailView(TemplateView):
             context['Medium_grade'] = sum([item[0] for item in medium_grade]) / len(medium_grade)
         else:
             context['Medium_grade'] = 0
-            # context['Test cont'] = 'fasfdfsdf'
         return context
 
 class CourseFeedbackFormProcessView(LoginRequiredMixin, CreateView):
@@ -141,4 +140,21 @@ class LoginPageView(TemplateView):
 
 class TestPageView(TemplateView):
     template_name = "mainapp/test_html.html"
+
+
+
+
+
+
+class CourseUpdateView(PermissionRequiredMixin, UpdateView):
+    model = mainapp_models.Courses
+    fields = '__all__'
+    success_url = reverse_lazy
+    permission_required = ("mainapp.update_course",)
+
+class CourseCreateView(PermissionRequiredMixin, CreateView):
+    model = mainapp_models.Courses
+    fields = '__all__'
+    success_url = reverse_lazy
+    permission_required = ("mainapp.create_course")
 

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",  # для пользователей настрйока
     "crispy_forms",
-    "crispy_bootstrap4"
+    "crispy_bootstrap4",
+    "selfadminapp"
 ]
 
 MIDDLEWARE = [

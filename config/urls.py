@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("selfadminapp/", include("selfadminapp.urls", namespace="selfadminapp_namespace")),
     path("", RedirectView.as_view(url="mainapp/")),
     path("social_auth/", include("social_django.urls", namespace="social")),
     path("mainapp/", include("mainapp.urls", namespace="mainapp_namespace")),
