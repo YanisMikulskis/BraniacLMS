@@ -19,8 +19,10 @@
             {% endfor %}
         </select>
         <button id="button_course">Изменить выбранный курс</button>
+        <button id="button_new_course">Добавить новый курс</button>
 
     <script>
+
     document.getElementById('button_course').addEventListener('click', function() {
         var selectedOptionCourse = document.getElementById('select_course').value;  // Получение id выбранного варианта
         if (selectedOptionCourse) {  // Проверяем, что выбран вариант
@@ -30,6 +32,18 @@
             alert('Пожалуйста, выберите вариант перед переходом.');
         }
     });
+
+    document.getElementById('button_new_course').addEventListener('click', function () {
+        var selectedOptionCourse = document.getElementById('select_course').value;
+        if (selectedOptionCourse) {  // Проверяем, что выбран вариант
+            // Переход на страницу настроек для выбранного варианта
+            window.location.href = '/selfadminapp/course/' + selectedOptionCourse + '/create';
+        } else {
+            alert('Пожалуйста, выберите вариант перед переходом.');
+        }
+    });
+
+
     </script>
 
 
@@ -48,6 +62,7 @@
             {% endfor %}
         </select>
         <button id="button_news">Изменить выбранную новость</button>
+        <button id="button_new_news">Добавить новую новость</button>
 
         <script>
         document.getElementById('button_news').addEventListener('click', function() {
@@ -55,6 +70,16 @@
             if (selectedOptionNews) {  // Проверяем, что выбран вариант
                 // Переход на страницу настроек для выбранного варианта
                 window.location.href = '/selfadminapp/news/' + selectedOptionNews + '/update';
+            } else {
+                alert('Пожалуйста, выберите вариант перед переходом.');
+            }
+        });
+
+        document.getElementById('button_new_news').addEventListener('click', function() {
+            var selectedOptionNews = document.getElementById('select_news').value;  // Получение id выбранного варианта
+            if (selectedOptionNews) {  // Проверяем, что выбран вариант
+                // Переход на страницу настроек для выбранного варианта
+                window.location.href = '/selfadminapp/news/' + selectedOptionNews + '/create';
             } else {
                 alert('Пожалуйста, выберите вариант перед переходом.');
             }
@@ -79,6 +104,7 @@
             {% endfor %}
         </select>
         <button id="button_teacher">Изменить данные преподавателя</button>
+        <button id="button_new_teacher">Добавить нового преподавателя</button>
 
         <script>
         document.getElementById('button_teacher').addEventListener('click', function() {
@@ -86,6 +112,16 @@
             if (selectedOptionTeachers) {  // Проверяем, что выбран вариант
                 // Переход на страницу настроек для выбранного варианта
                 window.location.href = '/selfadminapp/teacher/' + selectedOptionTeachers + '/update';
+            } else {
+                alert('Пожалуйста, выберите вариант перед переходом.');
+            }
+        });
+
+        document.getElementById('button_new_teacher').addEventListener('click', function() {
+            var selectedOptionTeachers = document.getElementById('select_teacher').value;  // Получение id выбранного варианта
+            if (selectedOptionTeachers) {  // Проверяем, что выбран вариант
+                // Переход на страницу настроек для выбранного варианта
+                window.location.href = '/selfadminapp/teacher/' + selectedOptionTeachers + '/create';
             } else {
                 alert('Пожалуйста, выберите вариант перед переходом.');
             }

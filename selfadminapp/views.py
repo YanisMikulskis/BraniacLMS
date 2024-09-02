@@ -54,15 +54,28 @@ class TeacherUpdateView(PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy("selfadminapp_namespace:admin_custom")
     permission_required = ("selfadminapp.update_teachers",)
 
+
+
 class CourseCreateView(PermissionRequiredMixin, CreateView):
     model = Courses
     fields = '__all__'
-    success_url = reverse_lazy("selfadminapp_namespace:admin_custom")
-    permission_required = ("selfadminapp.create_course")
+    success_url = reverse_lazy('selfadminapp_namespace:admin_custom')
+    permission_required = ('selfadminapp.create_course',)
 
-    # class NewsUpdateView(PermissionRequiredMixin, UpdateView):
-    #     model = mainapp_models.News
-    #     fields = "__all__"
-    #     success_url = reverse_lazy("mainapp_namespace:news")
-    #     permission_required = ("mainapp.change_news",)
-# Create your views here.
+
+class NewsCreateView(PermissionRequiredMixin, CreateView):
+    model = News
+    fields = '__all__'
+    success_url = reverse_lazy('selfadminapp_namespace:admin_custom')
+    permission_required = ('selfadminapp.create_news',)
+
+class TeacherCreateView(PermissionRequiredMixin, CreateView):
+    model = CourseTeachers
+    fields = '__all__'
+    success_url = reverse_lazy('selfadminapp_namespace:admin_custom')
+    permission_required = ('selfadminapp.create_teachers',)
+
+
+
+
+
