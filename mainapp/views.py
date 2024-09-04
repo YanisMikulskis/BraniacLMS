@@ -13,6 +13,8 @@ from django.urls import reverse_lazy
 from mainapp import forms
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+import logging
+logger = logging.getLogger(__name__)
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
 
@@ -95,6 +97,7 @@ class CoursesPageView(TemplateView):
 class CoursesDetailView(TemplateView):
     template_name = "mainapp/courses_detail.html"
     def get_context_data(self, pk=None, **kwargs):
+        logger.debug("Yet another log message")
         context = super().get_context_data(pk=pk, **kwargs)
         context['Courses'] = get_object_or_404(Courses, pk=pk)
         context['Teachers'] = CourseTeachers.objects.filter(course=context['Courses'])
