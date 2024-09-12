@@ -13,7 +13,7 @@ urlpatterns = [
     path("news/<int:pk>/update", views.NewsUpdateView.as_view(), name="news_update"),
     path("news/<int:pk>/delete", views.NewsDeleteView.as_view(), name="news_delete"),
 
-    path("course/<int:pk>/update", views.CourseUpdateView.as_view(), name='course_update'),
+    # path("course/<int:pk>/update", views.CourseUpdateView.as_view(), name='course_update'),
 
     # path("news/", views.NewsListView.as_view(), name="news_page"),
     # path("news/<int:page>/", views.NewsWithPaginatorView.as_view(), name="news_paginator"),
@@ -23,6 +23,8 @@ urlpatterns = [
     path("contacts/", views.ContactsPageView.as_view(), name="contacts_page"),
     path("doc_site/", views.DocSitePageView.as_view(), name="doc_page"),
     path("test_page/", views.TestPageView.as_view(), name="test_page_for_namespace"),
-    path("course_feedback/", views.CourseFeedbackFormProcessView.as_view(), name="course_feedback")
+    path("course_feedback/", views.CourseFeedbackFormProcessView.as_view(), name="course_feedback"),
+    path("log_view/", views.LogView.as_view(), name='log_view'),
+    path("log_download/", views.LogDownloadView.as_view(), name='log_download')
 ]
 

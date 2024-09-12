@@ -2,17 +2,18 @@ import os
 from datetime import datetime
 from typing import Any
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView, View
 from .models import News, Courses, Lesson, CourseTeachers
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.safestring import mark_safe
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from mainapp import models as mainapp_models
 from django.urls import reverse_lazy
 from mainapp import forms
 from django.template.loader import render_to_string
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
+from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 class MainPageView(TemplateView):
@@ -89,6 +90,7 @@ class CoursesPageView(TemplateView):
     template_name = "mainapp/courses_list.html"
 
     def get_context_data(self, **kwargs):
+        logger.debug(f"This is CoursePageView")
         context = super().get_context_data(**kwargs)
         context['Courses'] = Courses.objects.all()
         return context
@@ -145,10 +147,6 @@ class TestPageView(TemplateView):
     template_name = "mainapp/test_html.html"
 
 
-
-
-
-
 class CourseUpdateView(PermissionRequiredMixin, UpdateView):
     model = mainapp_models.Courses
     fields = '__all__'
@@ -160,4 +158,25 @@ class CourseCreateView(PermissionRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy
     permission_required = ("mainapp.create_course")
+
+class LogView(TemplateView):
+    template_name = 'mainapp/log_view.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        log_slice = []
+        with open(settings.LOG_FILE, 'r') as log_file:
+            for number_line, line in enumerate(log_file):
+                if number_line == 100:
+                    break
+                log_slice.insert(0, line)
+        context['log'] = ''.join(log_slice)
+        return context
+
+class LogDownloadView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get(self, *args, **kwargs):
+        return FileResponse(open(settings.LOG_FILE, "rb"))
+
 
