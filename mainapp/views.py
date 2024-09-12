@@ -163,12 +163,13 @@ class LogView(TemplateView):
     template_name = 'mainapp/log_view.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        current_user = self.request.user.get_username()
         log_slice = []
         with open(settings.LOG_FILE, 'r') as log_file:
             for number_line, line in enumerate(log_file):
                 if number_line == 100:
                     break
-                log_slice.insert(0, line)
+                log_slice.insert(0, f'{current_user}: {line}')
         context['log'] = ''.join(log_slice)
         return context
 
