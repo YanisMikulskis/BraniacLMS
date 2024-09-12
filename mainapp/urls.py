@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from . import views
 from .apps import MainappConfig
@@ -18,7 +19,7 @@ urlpatterns = [
     # path("news/", views.NewsListView.as_view(), name="news_page"),
     # path("news/<int:page>/", views.NewsWithPaginatorView.as_view(), name="news_paginator"),
     # path("page/<int:pk>/", views.NewPageDetailView.as_view(), name="detail_news"),
-    path("courses/", views.CoursesPageView.as_view(), name="courses_page"),
+    path("courses/", cache_page(60*5)(views.CoursesPageView.as_view()), name="courses_page"),
     path("courses/<int:pk>/", views.CoursesDetailView.as_view(), name="courses_details"),
     path("contacts/", views.ContactsPageView.as_view(), name="contacts_page"),
     path("doc_site/", views.DocSitePageView.as_view(), name="doc_page"),

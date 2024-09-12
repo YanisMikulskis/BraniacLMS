@@ -24,7 +24,12 @@ SECRET_KEY = "django-insecure-ovc9%f161n0p4*g5(@51)@8h71$s^h#h1p5(imlb#%71oo1l@w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+if DEBUG:
+    INTERNAL_IPS = [
+                "192.168.1.4",
+                "127.0.0.1",
+                    ]
 
 # Application definition
 
@@ -41,7 +46,8 @@ INSTALLED_APPS = [
     "authapp",  # для пользователей настрйока
     "crispy_forms",
     "crispy_bootstrap4",
-    "selfadminapp"
+    "selfadminapp",
+    "debug_toolbar"
 ]
 
 MIDDLEWARE = [
@@ -52,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -151,7 +158,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
-
 LOG_FILE = BASE_DIR / "var" / "log" / "main_log.log"
 LOGGING = {"version": 1,
            "disable_existing_loggers": False,
@@ -175,3 +181,13 @@ LOGGING = {"version": 1,
                }
            },
            }
+
+CACHES = {
+    "default":{
+        'BACKEND': "django_redis.cache.RedisCache",
+        'LOCATION': "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            'CLIENT_CLASS': "django_redis.client.DefaultClient",
+        }
+    }
+}
