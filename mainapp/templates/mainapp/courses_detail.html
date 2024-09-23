@@ -19,7 +19,10 @@
   <div class="col-sm-12 col-md-6 col-lg-8 order-2 order-md-1">
     <div class="row h-100">
       <div class="col-12">
-        {{ course_object.description }}
+        {{ Courses.description }}
+
+
+
       </div>
       <div class="col-12 align-self-end">
         <p>
@@ -60,32 +63,33 @@
 </div>
 <div class="accordion" id="accordionLessons">
 
-  {% for item in Lessons %}
-  <div class="card">
-    <div class="card-header" id="headLessonPk{{ item.pk }}">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-          data-target="#collapse{{ item.pk }}" aria-expanded="true" aria-controls="collapse{{ item.pk }}">
-          {{ item.course.name }} - {{ item.title }}
-        </button>
-      </h2>
-    </div>
 
-    <div id="collapse{{ item.pk }}" class="collapse" aria-labelledby="headLessonPk{{ item.pk }}"
-      data-parent="#accordionLessons">
-      <div class="card-body">
-        <div class="row justify-content-center">
-          <div class="col-12 text-center">
-            <img src="{% static 'img/no_image.svg' %}" width="250px">
-          </div>
-          <div class="col-12">
-            {{ item.description }}
-          </div>
-        </div>
+{% for item in Lessons %}
+<div class="card">
+<div class="card-header" id="headLessonPk{{ item.pk }}">
+  <h2 class="mb-0">
+    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+      data-target="#collapse{{ item.pk }}" aria-expanded="true" aria-controls="collapse{{ item.pk }}">
+      {{ item.course.name }} - {{ item.title }}
+    </button>
+  </h2>
+</div>
+
+<div id="collapse{{ item.pk }}" class="collapse" aria-labelledby="headLessonPk{{ item.pk }}"
+  data-parent="#accordionLessons">
+  <div class="card-body">
+    <div class="row justify-content-center">
+      <div class="col-12 text-center">
+        <img src="{% static 'img/no_image.svg' %}" width="250px">
+      </div>
+      <div class="col-12">
+        {{ item.description }}
       </div>
     </div>
   </div>
-  {% endfor %}
+</div>
+</div>
+{% endfor %}
 
 </div>
 <h3>Отзывы</h3>

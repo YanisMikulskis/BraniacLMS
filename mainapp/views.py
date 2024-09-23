@@ -14,6 +14,7 @@ from mainapp import forms
 from django.template.loader import render_to_string
 from django.http import JsonResponse, FileResponse
 from django.conf import settings
+from django.core.cache import cache
 import logging
 logger = logging.getLogger(__name__)
 class MainPageView(TemplateView):
@@ -103,13 +104,24 @@ class CoursesDetailView(TemplateView):
         context = super().get_context_data(pk=pk, **kwargs)
         context['Courses'] = get_object_or_404(Courses, pk=pk)
         context['Teachers'] = CourseTeachers.objects.filter(course=context['Courses'])
-        context['Lesson'] = Lesson.objects.filter(course=context['Courses'])
+        context['Lessons'] = Lesson.objects.filter(course=context['Courses'])
         if not self.request.user.is_anonymous:
             if not mainapp_models.CourseFeedback.objects.filter(
                 course=context['Courses'], user = self.request.user).count():
                 context['feedback_form'] = forms.CourseFeedbackForm(course=context['Courses'], user=self.request.user)
+
+
+        # cached_feedback = cache.get(f'feedback_list_{pk}')
+        # #Для кэширования нужно снять комментарии с кода и включить редис!
+        # #brew services start redis (для MacOS)
+        # if not cached_feedback:
         context['Feedback_list'] = mainapp_models.CourseFeedback.objects.filter(
-            course = context['Courses']).order_by('-created', '-rating')[:5]
+                course = context['Courses']).order_by('-created', '-rating')[:5]
+            # cache.set(f'feedback_list_{pk}', context['Feedback_list'], timeout=300)
+        # else:
+        #     context['Feedback_list'] = cached_feedback
+
+
         if context['Feedback_list']:
             medium_grade = mainapp_models.CourseFeedback.objects.filter(course=context['Courses']).values_list('rating')
             context['Medium_grade'] = sum([item[0] for item in medium_grade]) / len(medium_grade)
