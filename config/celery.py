@@ -5,7 +5,7 @@ from celery import Celery
 #Для начала нужно установить значение по умолчанию для среды DJANGO_SETTINGS_MODULE,
 # чтобы Celery знала, как найти проект Django.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-# Затем мы создали экземпляр Celery с именем braniac и поместили в переменную celery_app.
+# Затем мы создали экземпляр Celery с именем braniac и поместили в переменную celery_papp.
 celery_app = Celery('braniac')
 # Затем мы загрузили значения конфигурации Celery из объекта
 # настроек из django.conf. Мы использовали namespace=«CELERY»

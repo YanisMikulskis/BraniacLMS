@@ -4,13 +4,15 @@ from typing import Any
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView, View
 from .models import News, Courses, Lesson, CourseTeachers
-from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from mainapp import models as mainapp_models
 from django.urls import reverse_lazy
 from mainapp import forms
+from mainapp import tasks as mainapp_tasks
 from django.template.loader import render_to_string
 from django.http import JsonResponse, FileResponse
 from django.conf import settings
@@ -145,6 +147,35 @@ class CourseFeedbackFormProcessView(LoginRequiredMixin, CreateView):
 
 class ContactsPageView(TemplateView):
     template_name = "mainapp/contacts.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context[f'message_form'] = forms.MailFeedbackForm(user=self.request.user)
+        return context
+    #redis-server & celery -A config worker -l INFO & python manage.py runserver
+
+    def post(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            cache_log_flag = cache.get(f'mail_feedback_lock_{self.request.user.pk}')
+            if not cache_log_flag: #если в кэше у текущего юзера нет сообщения, которое он отправил
+                cache.set(f'mail_feedback_lock_{self.request.user.pk}',
+                            'lock', timeout=60)
+                messages.add_message(self.request, messages.INFO, _('Message sended'))
+                mainapp_tasks.send_feedback_mail.delay({
+                    'user_id': self.request.POST.get('user_id'),
+                    'message': self.request.POST.get('message')
+                })
+            else:
+                messages.add_message(
+                    self.request,
+                    messages.WARNING,
+                    _('You can send only one message per 1 minute')
+                )
+
+        return HttpResponseRedirect(reverse_lazy('mainapp_namespace:contacts_page'))
+
+
 
 
 class DocSitePageView(TemplateView):
