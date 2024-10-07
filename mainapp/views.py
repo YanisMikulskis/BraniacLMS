@@ -18,6 +18,7 @@ from django.http import JsonResponse, FileResponse
 from django.conf import settings
 from django.core.cache import cache
 import logging
+
 logger = logging.getLogger(__name__)
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -25,6 +26,7 @@ class MainPageView(TemplateView):
 
 class NewsListView(ListView):
     model = mainapp_models.News
+    logger.debug("Log news")
     paginate_by = 5
     def get_queryset(self):
         return super().get_queryset().filter(deleted=False)
@@ -209,8 +211,12 @@ class LogView(TemplateView):
         current_user = self.request.user.get_username()
         log_slice = []
         with open(settings.LOG_FILE, 'r') as log_file:
+            print(f'Размер ЛОГА {os.path.getsize(settings.LOG_FILE) // 1024} кб')
+
+            # print(f'Количество строк ЛОГА {len(log_file.read())} шт')
             for number_line, line in enumerate(log_file):
-                if number_line == 100:
+
+                if number_line == 200:
                     break
                 log_slice.insert(0, f'{current_user}: {line}')
         context['log'] = ''.join(log_slice)
