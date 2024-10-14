@@ -195,9 +195,28 @@ CACHES = {
         }
     }
 }
+# Настройки Celery (redis)
+# CELERY_BROKER_URL = "redis://localhost:6379"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379"
+# Настройки Celery (rabbitmq)
+CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ работает по протоколу AMQP
+CELERY_ACCEPT_CONTENT = ['json']  # Формат данных
+CELERY_TASK_SERIALIZER = 'json'  # Формат сериализации задач
+# CELERY_RESULT_BACKEND = 'amqp://localhost:6379'  # Используем backend через RabbitMQ
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+# Чтобы прицепить RabbitMQ в качестве брокера сообщений
+# 1. Установить rabbitmq
+# 2. Запустить rabbitmq (на macos brew services start rabbitmq)
+# 3. проверить, корректно ли он работает. Ввести в браузере http://localhost:15672. Если выходит интерфейс - значит все ок
+# 4. Запустить отладочный сервак через IDE(не через терминал)
+# 5. Через терминал запустить celery (celery -A config worker --loglevel=info)
+# 6. Отправить сообщение
+
+
 
 # Read about sending email:
 # https://docs.djangoproject.com/en/3.2/topics/email/
@@ -217,5 +236,16 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
 # Email as files for debug
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+
 EMAIL_FILE_PATH = "var/email-messages/"
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your_email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your_password'
+# DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
+
 

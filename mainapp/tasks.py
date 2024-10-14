@@ -21,3 +21,13 @@ def send_feedback_mail(message_form: Dict[str, Union[int, str]]) -> None:
         fail_silently=False,
     )
     return None
+
+@shared_task
+def test_task():
+    print(f'Celery activated')
+
+
+@shared_task
+def add(x, y):
+    print(x ** y)
+    return x ** y
