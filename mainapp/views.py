@@ -90,15 +90,20 @@ class NewsDeleteView(PermissionRequiredMixin, DeleteView):
 #     def back(cls):
 #         return cls.page_by_class
 
+class CoursesListView(ListView):
+    model = mainapp_models.Courses
+    paginate_by = len(model.objects.all())
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
 
-class CoursesPageView(TemplateView):
-    template_name = "mainapp/courses_list.html"
-
-    def get_context_data(self, **kwargs):
-        logger.debug(f"This is CoursePageView")
-        context = super().get_context_data(**kwargs)
-        context['Courses'] = Courses.objects.all()
-        return context
+# class CoursesPageView(TemplateView):
+#     template_name = "mainapp/courses_list.html"
+#
+#     def get_context_data(self, **kwargs):
+#         logger.debug(f"This is CoursePageView")
+#         context = super().get_context_data(**kwargs)
+#         context['Courses'] = Courses.objects.all()
+#         return context
 
 
 class CoursesDetailView(TemplateView):
@@ -175,20 +180,7 @@ class ContactsPageView(TemplateView):
                     messages.WARNING,
                     _('You can send only one message per 1 minute')
                 )
-            # if not cache_log_flag: #если в кэше у текущего юзера нет сообщения, которое он отправил
-            #     cache.set(f'mail_feedback_lock_{self.request.user.pk}',
-            #                 'lock', timeout=60)
-            #     messages.add_message(self.request, messages.INFO, _('Message sended'))
-            #     mainapp_tasks.send_feedback_mail.delay({
-            #         'user_id': self.request.POST.get('user_id'),
-            #         'message': self.request.POST.get('message')
-            #     })
-            # else:
-            #     messages.add_message(
-            #         self.request,
-            #         messages.WARNING,
-            #         _('You can send only one message per 1 minute')
-            #     )
+
 
         return HttpResponseRedirect(reverse_lazy('mainapp_namespace:contacts_page'))
 

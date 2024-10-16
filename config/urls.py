@@ -27,6 +27,7 @@ urlpatterns = [
     path("social_auth/", include("social_django.urls", namespace="social")),
     path("mainapp/", include("mainapp.urls", namespace="mainapp_namespace")),
     path("authapp/", include("authapp.urls", namespace="authapp_namespace")),
+    path("i18n/", include("django.conf.urls.i18n"))
 
 ]
 

@@ -247,5 +247,6 @@ EMAIL_FILE_PATH = "var/email-messages/"
 # EMAIL_HOST_USER = 'your_email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your_password'
 # DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
-
+#Интернационализация
+LOCALE_PATHS = [BASE_DIR / 'locale']
 
