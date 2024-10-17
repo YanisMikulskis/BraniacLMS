@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -121,6 +122,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = "ru-RU"
+LANGUAGES = [
+    ('en', 'English'),
+    ('ru', 'Russian')
+]
 
 TIME_ZONE = "Europe/Moscow"
 DATE_FORMAT = (('d-m-Y'))
@@ -129,10 +134,10 @@ DATETIME_FORMAT = (('d-m-Y H:i'))
 DATETIME_INPUT_FORMATS = (('%d-%m-%Y %H:%i'),)
 USE_I18N = True
 
-USE_L10N = False
+USE_L10N = True
 
-USE_TZ = False
-
+USE_TZ = True
+LANGUAGE_COOKIE_NAME = 'django_language'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -249,4 +254,5 @@ EMAIL_FILE_PATH = "var/email-messages/"
 # DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
 #Интернационализация
 LOCALE_PATHS = [BASE_DIR / 'locale']
+
 

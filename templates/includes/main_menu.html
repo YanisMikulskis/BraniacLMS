@@ -61,10 +61,30 @@
       {% endif %}
 
         <li class="nav-item {% if request.resolver_match.view_name == 'mainapp_namespace:contacts_page' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp_namespace:contacts_page' %}">Контакты</a>
+          <a class="nav-link" href="{% url 'mainapp_namespace:contacts_page' %}">{% translate "Contacts" %}</a>
         </li>
       </ul>
-      <span><a href="#">🇷🇺</a> <i class="fas fa-grip-lines-vertical"></i> <a href="#">🇬🇧</a></span>
+        <div class="row justify-content-end m-0">
+            <div class="col p-0 border-right">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="language" type="hidden" value="ru">
+                    <button type="submit" class="btn btn-link">🇷🇺</button>
+                </form>
+            </div>
+            <div class="col p-0 border-left">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="language" type="hidden" value="en">
+                    <button type="submit" class="btn btn-link">🇬🇧</button>
+                </form>
+            </div>
+        </div>
     </div>
   </div>
 </nav>
+
+
+
+
+

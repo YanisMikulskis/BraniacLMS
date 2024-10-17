@@ -237,3 +237,8 @@ class LogDownloadView(UserPassesTestMixin, View):
         return FileResponse(open(settings.LOG_FILE, "rb"))
 
 
+
+# def clean_cookie(request):
+#     response = HttpResponse('Удаляем куки файл с заглавной буквой')
+#     response.delete_cookie('django-Language')
+#     return response

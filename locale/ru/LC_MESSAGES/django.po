@@ -21,7 +21,7 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 msgid "Please, enter a valid age!"
-msgstr ""
+msgstr "Пожалуйста, введите подходящий возраст!"
 
 msgid "username"
 msgstr ""
@@ -59,58 +59,58 @@ msgid "date joined"
 msgstr ""
 
 msgid "user"
-msgstr ""
+msgstr "пользователь"
 
 msgid "users"
-msgstr ""
+msgstr "пользователи"
 
 msgid "Enter your message"
-msgstr ""
+msgstr "Введите ваше сообщение"
 
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
 msgid "Заголовок новости"
-msgstr ""
+msgstr "News title"
 
 msgid "Описание новости"
-msgstr ""
+msgstr "News body"
 
 msgid "Текст новости"
-msgstr ""
+msgstr "News Text"
 
 msgid "News"
-msgstr ""
+msgstr "Новости"
 
 msgid "Courses"
-msgstr ""
+msgstr "Курсы"
 
 msgid "Lesson"
-msgstr ""
+msgstr "Урок"
 
 msgid "Lessons"
-msgstr ""
+msgstr "Уроки"
 
 msgid "CourseTeachers"
-msgstr ""
+msgstr "Преподаватели"
 
 msgid "Course"
-msgstr ""
+msgstr "Курсы"
 
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 msgid "No feedback"
-msgstr ""
+msgstr "Нет отзывов"
 
 msgid "Feedback"
-msgstr ""
+msgstr "Отзывы"
 
 msgid "Rating"
-msgstr ""
+msgstr "Рейтинг"
 
-msgid "mMessage sended"
-msgstr ""
+msgid "Message sended"
+msgstr "Сообщение отправлено"
 
 msgid "You can send only one message per 1 minute"
 msgstr ""
