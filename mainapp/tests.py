@@ -1,9 +1,17 @@
 from http import HTTPStatus
-from unittest import mock
+
+import selenium
+
+import redis
+from unittest import mock, skipUnless
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.core import mail as django_mail
+import authapp.models
+import mainapp.tasks
 from .models import News, Courses
 import pickle
+
 class TestMainPage(TestCase):
 
     def test_page_open(self):
@@ -101,6 +109,14 @@ class TestNewsPage(TestCase):
         news_obj.refresh_from_db()
         self.assertTrue(news_obj.deleted)
 
+
+def is_redis_available():
+    try:
+        client = redis.StrictRedis(host='localhost', port=6379, db=0)
+        client.ping()
+        return True
+    except redis.ConnectionError:
+        return False
 class TestCoursesWithMock(TestCase):
     fixtures = {
         "authapp/fixtures/001_user_admin.json",
@@ -108,7 +124,7 @@ class TestCoursesWithMock(TestCase):
         "mainapp/fixtures/003_lesson_fixt.json",
         "mainapp/fixtures/004_courseteachers_fixt.json"
     }
-
+    @skipUnless(is_redis_available(), 'Redis is not available')
     def test_page_open_detail(self): #для успешного выполнения теста надо включить редис!
         course_obj = Courses.objects.first()
         print(course_obj)
@@ -120,3 +136,26 @@ class TestCoursesWithMock(TestCase):
             result = self.client.get(path)
             self.assertEqual(result.status_code, HTTPStatus.OK)
             self.assertTrue(mocked_cache.called)
+
+
+class TestTaskMailSend(TestCase):
+    fixtures = {"authapp/fixtures/001_user_admin.json"}
+    def test_mail_send(self):
+        message_text = 'test_message_text'
+        user_obj = authapp.models.CustomUser.objects.first()
+        mainapp.tasks.send_feedback_mail(
+            {'user_id': user_obj.id,
+             'message': message_text}
+        )
+        self.assertEqual(django_mail.outbox[0].body, message_text)
+
+
+class TestNewsSelenium(TestCase):
+    fixtures = {
+        "authapp/fixtures/001_user_admin.json",
+        "mainapp/fixtures/001_news_fixt.json"
+    }
+
+    def setUp(self):
+        super().setUp()
+        self.selenium = WebDriver(exe)

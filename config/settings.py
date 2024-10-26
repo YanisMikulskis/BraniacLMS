@@ -256,5 +256,7 @@ EMAIL_FILE_PATH = "var/email-messages/"
 # DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
 #Интернационализация
 LOCALE_PATHS = [BASE_DIR / 'locale']
+#selenium
 
+SELENIUM_DRIVER_PATH_FF = BASE_DIR / 'var' / 'selenium' / 'geckodriver'
 
