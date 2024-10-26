@@ -40,14 +40,15 @@ class NewsCreateView(PermissionRequiredMixin, CreateView):
 class NewsDetailView(DetailView):
     model = mainapp_models.News
 
+
 class NewsUpdateView(PermissionRequiredMixin, UpdateView):
     model = mainapp_models.News
     fields = "__all__"
-    success_url = reverse_lazy("mainapp_namespace:news")
+    success_url = reverse_lazy("mainapp_namespace:news_list") #!!!!!!!!!!!
     permission_required = ("mainapp.change_news",)
 class NewsDeleteView(PermissionRequiredMixin, DeleteView):
     model = mainapp_models.News
-    success_url = reverse_lazy("mainapp_namespace:news")
+    success_url = reverse_lazy("mainapp_namespace:news_list")
     permission_required = ("mainapp.delete_news",)
 
 
@@ -120,15 +121,19 @@ class CoursesDetailView(TemplateView):
                 context['feedback_form'] = forms.CourseFeedbackForm(course=context['Courses'], user=self.request.user)
 
 
-        # cached_feedback = cache.get(f'feedback_list_{pk}')
+        cached_feedback = cache.get(f'feedback_list_{pk}')
         # #Для кэширования нужно снять комментарии с кода и включить редис!
         # #brew services start redis (для MacOS)
-        # if not cached_feedback:
-        context['Feedback_list'] = mainapp_models.CourseFeedback.objects.filter(
+        if not cached_feedback:
+            context['Feedback_list'] = mainapp_models.CourseFeedback.objects.filter(
                 course = context['Courses']).order_by('-created', '-rating')[:5]
-            # cache.set(f'feedback_list_{pk}', context['Feedback_list'], timeout=300)
-        # else:
-        #     context['Feedback_list'] = cached_feedback
+            cache.set(f'feedback_list_{pk}', context['Feedback_list'], timeout=300)
+            import pickle
+
+            with open(f"mainapp/fixtures/006_feedback_list_{pk}.bin", 'wb') as outf:
+                pickle.dump(context['Feedback_list'], outf)
+        else:
+            context['Feedback_list'] = cached_feedback
 
 
         if context['Feedback_list']:
