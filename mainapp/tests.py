@@ -1,7 +1,12 @@
 from http import HTTPStatus
 
-import selenium
-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.safari.webdriver import WebDriver
+from django.conf import settings
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import redis
 from unittest import mock, skipUnless
 from django.test import TestCase, Client
@@ -31,6 +36,16 @@ class TestNewsPage(TestCase):
         path_auth = reverse('authapp_namespace:login')
         self.client_with_auth.post(path_auth, data={'username': 'admin',
                                                     'password': 'admin'})
+        # self.selenium = WebDriver()
+        # self.selenium.implicitly_wait(10)
+        # self.selenium
+
+        # self.selenium = WebDriver()
+        # self.selenium.implicitly_wait(10)
+        # # Login
+        # self.selenium.get(f"{self.live_server_url}{reverse('authapp_namespace:login')}")
+        # button_enter = WebDriverWait(self.selenium, 5).until(EC.visibility_of_element_located([By.CSS_SELECTOR,
+        #                                                                                        '[type="submit"]']))
 
     def test_page_open(self):
         path = reverse('mainapp_namespace:news_list')
@@ -150,7 +165,7 @@ class TestTaskMailSend(TestCase):
         self.assertEqual(django_mail.outbox[0].body, message_text)
 
 
-class TestNewsSelenium(TestCase):
+class TestNewsSelenium(StaticLiveServerTestCase):
     fixtures = {
         "authapp/fixtures/001_user_admin.json",
         "mainapp/fixtures/001_news_fixt.json"
@@ -158,4 +173,58 @@ class TestNewsSelenium(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.selenium = WebDriver(exe)
+        self.selenium = WebDriver()
+        self.selenium.implicitly_wait(10)
+        #Login
+
+        self.selenium.get(f"{self.live_server_url}{reverse('authapp_namespace:login')}")
+        button_enter = WebDriverWait(self.selenium, 5).until(EC.visibility_of_element_located([By.CSS_SELECTOR,
+                                                                                               '[type="submit"]']))
+        # button_enter = WebDriverWait(self.selenium, 5).until(EC.visbility_of_element_located(
+        #     (By.CSS_SELECTOR, '[type="submit"]')
+        # ))
+
+        self.selenium.find_element(By.ID, 'id_username').send_keys('admin')
+        self.selenium.find_element(By.ID, 'id_password').send_keys('admin')
+        button_enter.click()
+        #wait for footer
+        WebDriverWait(self.selenium, 20).until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, 'list-unstyled'))
+        )
+
+    def test_create_button_clickable(self):
+        path_list = f"{self.live_server_url}{reverse('mainapp_namespace:news_list')}"
+        path_add = reverse("mainapp_namespace:news_create")
+        self.selenium.get(path_list)
+        print(f'start frame')
+        button_create = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, f'[href="{path_add}"]'))
+        )
+        print("Trying to click button ...")
+        button_create.click()  # Test that button clickable
+        WebDriverWait(self.selenium, 10).until(EC.visibility_of_element_located((By.ID, "id_title")))
+        print("Button clickable!")
+        # With no element - test will be failed
+        # WebDriverWait(self.selenium, 5).until(
+        #     EC.visibility_of_element_located((By.ID, "id_title111"))
+        # )
+
+    def test_pick_color(self):
+        path = f"{self.live_server_url}{reverse('mainapp_namespace:main_page')}"
+        self.selenium.get(path)
+        navbar_el = WebDriverWait(self.selenium, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, "navbar")))
+        try:
+            self.assertEqual(
+                navbar_el.value_of_css_property("background-color"),
+                "rgb(255, 255, 155)",
+            )
+        except AssertionError:
+            with open("var/screenshots/001_navbar_el_scrnsht.png", "wb") as outf:
+                outf.write(navbar_el.screenshot_as_png)
+            raise
+
+    def tearDown(self):
+        # Close browser
+        if self.selenium:
+            self.selenium.quit()
+        super().tearDown()
