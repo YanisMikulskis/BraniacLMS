@@ -73,7 +73,7 @@
 
     {% if perms.mainapp.add_news %}
     <a class="btn btn-primary btn-block" role="button"
-      href="{% url 'mainapp:news_create' %}">Добавить новость</a>
+      href="{% url 'mainapp_namespace:news_create' %}">Добавить новость</a>
     {% endif %}
 
   </div>

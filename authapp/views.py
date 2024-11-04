@@ -101,6 +101,7 @@ class MyCourses(TemplateView):
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(pk=pk, **kwargs)
         self.current_user = CustomUser.objects.get(id=self.request.user.id)
+        print(f' fdsf {self.current_user.purchased_courses.all()}')
         my_courses = self.current_user.purchased_courses.all()
         context['my_courses'] = my_courses
         return context

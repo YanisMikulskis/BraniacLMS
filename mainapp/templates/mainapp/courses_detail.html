@@ -45,8 +45,13 @@
           <span style="font-size: 30pt;">
             {{ Courses.cost}}
           </span><br>
+            {% if user.is_authenticated %}
           <a href="{% url 'authapp_namespace:add_course' pk=Courses.pk %}" class="btn btn-outline-primary btn-block"
              role="button">Купить</a>
+            {% else %}
+            <a href="#" class="btn btn-outline-primary btn-block"
+             role="button">Войдите, чтобы купить</a>
+            {% endif %}
         </p>
       </div>
     </div>
@@ -97,7 +102,7 @@
 <div id="feedback_list">
   {% if Feedback_list %}
   {% for item in Feedback_list %}
-  {% include 'mainapp/includes/feedback_card.html' %}
+    {% include 'mainapp/includes/feedback_card.html' %}
   {% endfor %}
   {% else %}
   <p>

@@ -17,7 +17,11 @@
       "is_active": true,
       "date_joined": "2021-09-07T14:17:38.413Z",
       "groups": [],
-      "user_permissions": []
+      "user_permissions": [],
+      "purchased_courses": []
+
+
+
     }
   }
 ]
