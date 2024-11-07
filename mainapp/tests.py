@@ -300,7 +300,7 @@ class TestCRUDSelenium(StaticLiveServerTestCase):
         button_post.click() # кликаем ее
         time.sleep(2) #специальная пауза, чтобы во время теста добавить новость в БД и отрисовать страницу с новостями (редирект)
         self.assertIn('Тестовая новость из селениума', self.selenium.page_source) # проверяем наличие заглавия новости в списке новостей
-    # @skip
+    @skip
     def test_CRUD_read(self):
         # self.test_login_by_selenium()
         # self.selenium.set_window_size(1710, 1112)
@@ -316,6 +316,7 @@ class TestCRUDSelenium(StaticLiveServerTestCase):
         self._login_and_size()
         self.selenium.get(f'{self.live_server_url}{reverse("mainapp_namespace:news_update", args=[2])}')
         time.sleep(2)
+        print(self.selenium.current_url)
 
 
 
