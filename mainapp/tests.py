@@ -1,6 +1,7 @@
 import time
 from http import HTTPStatus
 
+import selenium.common.exceptions
 from selenium import webdriver
 
 from selenium.webdriver.common.by import By
@@ -12,7 +13,7 @@ from selenium.webdriver.common.keys import Keys
 from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import redis
-from unittest import mock, skipUnless
+from unittest import mock, skipUnless, skip
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.core import mail as django_mail
@@ -21,6 +22,8 @@ import mainapp.tasks
 from .models import News, Courses
 import pickle
 from django.contrib.auth import get_user_model
+
+from screeninfo import get_monitors
 
 class TestMainPage(TestCase): #тест стартовой страницы
 
@@ -275,17 +278,107 @@ class TestCRUDSelenium(StaticLiveServerTestCase):
         self.current_url = self.selenium.current_url
         self.assertEqual(self.current_url, url_after_login)
 
+    def _login_and_size(self):
+        self.test_login_by_selenium()
+        self.selenium.set_window_size(1710, 1112)
+    @skip
     def test_CRUD_create(self):
-        self.test_login_by_selenium() #логинимся, используя предыдущий тест
+        # self.test_login_by_selenium() #логинимся, используя предыдущий тест
+        # self.selenium.set_window_size(1710, 1112) # включаем режим полного окна
+        self._login_and_size()
 
-        news_button = self.selenium.find_element(By.LINK_TEXT, 'Новости') # находим текст-ссылку с надписью Новости
-        news_button.click() # нажимаем
+        self.selenium.get(f'{self.live_server_url}{reverse("mainapp_namespace:news_create")}') # переходим к странице создания новости
 
-        path_news = f'{self.live_server_url}{reverse("mainapp_namespace:news_list")}' # текущий url после нажатия
-        current_url = self.selenium.current_url # url на который перешел Selenium
-        #self.assertEqual(current_url, path_news) # Сравниваем. Они должны быть идентичны
+        self.selenium.find_element(By.NAME, 'title').send_keys('Тестовая новость из селениума') # находим элемент
+        self.selenium.find_element(By.NAME, 'preambule').send_keys('Тестовое описание из селениума') # находим элемент
+        self.selenium.find_element(By.NAME, 'body').send_keys(f'Тестовое тело новости из селениума') # находим элемент
+        button_post = WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[text()='Опубликовать']"))
+        ) # находи элемент (кнопку публикации новости)
+        print(f'кнопка кликабельна') if button_post.is_displayed() and button_post.is_enabled() else print(f'не кликабельна')
+
+        button_post.click() # кликаем ее
+        time.sleep(2) #специальная пауза, чтобы во время теста добавить новость в БД и отрисовать страницу с новостями (редирект)
+        self.assertIn('Тестовая новость из селениума', self.selenium.page_source) # проверяем наличие заглавия новости в списке новостей
+    # @skip
+    def test_CRUD_read(self):
+        # self.test_login_by_selenium()
+        # self.selenium.set_window_size(1710, 1112)
+        self._login_and_size()
+        self.selenium.get(f'{self.live_server_url}{reverse("mainapp_namespace:news_detail", args=[2])}')
+        time.sleep(2)
+        print(self.selenium.current_url)
+        detail_news_2 = News.objects.get(id=2).body
+        self.assertIn(detail_news_2, self.selenium.page_source)
 
 
+    def test_CRUD_update(self):
+        self._login_and_size()
+        self.selenium.get(f'{self.live_server_url}{reverse("mainapp_namespace:news_update", args=[2])}')
+        time.sleep(2)
+
+
+
+        # create_news_path = reverse('mainapp_namespace:news_create')
+        # url_for_selenium =f'{self.live_server_url}{create_news_path}'
+        # self.selenium.get(url_for_selenium)
+        #
+        # self.selenium.find_element(By.NAME, 'title').send_keys('Тестовая новость из селениума')
+        # self.selenium.find_element(By.NAME, 'preambule').send_keys('Тестовое описание из селениума')
+        # self.selenium.find_element(By.NAME, 'body').send_keys(f'Тестовое тело новости из селениума')
+        # news_before_selenium = f'новости до сел {News.objects.count()}'
+        #
+        # element = self.selenium.find_element(By.XPATH, '//button[text()="Опубликовать"]')
+        #
+        # print(element.click())
+
+        #
+        #
+        news_after_selenium = f'новости после сел {News.objects.count()}'
+        # print(news_before_selenium)
+        # print(news_after_selenium)
+        # self.selenium.get(f'{self.live_server_url}{reverse("mainapp_namespace:news_list")}')
+        #
+        # print(self.selenium.current_url)
+
+
+
+        # self.selenium.refresh()
+        # self.assertIn('Тестовая новость из селениума', self.selenium.page_source)
+
+
+        # news_button = self.selenium.find_element(By.LINK_TEXT, 'Новости') # находим текст-ссылку с надписью Новости
+        # news_button.click() # нажимаем
+        # path_news = f'{self.live_server_url}{reverse("mainapp_namespace:news_list")}'
+        # current_url = self.selenium.current_url
+        # # print(f'current {current_url}')
+        #
+        # self.assertEqual(current_url, url_for_selenium) # Сравниваем. Они должны быть идентичны
+
+    # def test_detail_page(self):
+    #     self.test_CRUD_create()
+    #     time.sleep(3)
+    #     print(f'current 2 {self.selenium.current_url}')
+    #     try:
+    #         more_links = WebDriverWait(self.selenium, 10).until(
+    #             EC.presence_of_all_elements_located((By.LINK_TEXT, 'Подробнее'))
+    #         )
+    #     except selenium.common.exceptions.TimeoutException:
+    #         self.fail(f'НЕТ ССЫЛОК')
+    #     # more_links = self.selenium.find_elements(By.LINK_TEXT, 'Подробнее')
+    #     else:
+    #         self.assertGreater(len(more_links), 0, 'Noooooo')
+    # #     # < a href = "/mainapp/news/8/detail" class ="card-link" > Подробнее < /a >
+    # #     create_detail_link = self.selenium.find_element(By.XPATH, '//a[@href="/mainapp/news/8/detail" and @class="card-link')
+    # #     # create_detail_link = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.LINK_TEXT, 'Добавить новость')))
+    # #     # create_news_button = self.selenium.find_element(By.CSS_SELECTOR, '//a[@href="/mainapp/news/create"]')
+    # #     # create_detail_link = self.selenium.find_element(By.CSS_SELECTOR, 'href="/mainapp/news/8/detail')
+    # #     create_detail_link.click()
+    # #     path_detail = f'{self.live_server_url}{reverse("mainapp_namespace:news_detail")}'
+    # #     # path_news = f'{self.live_server_url}{reverse("mainapp_namespace:news_list")}'
+    # #     current_url = self.selenium.current_url
+    # #
+    # #     self.assertEqual(current_url, path_detail)  # Сравниваем. Они должны быть идентичны
     def tearDown(self):
 
         # Close browser

@@ -46,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(verbose_name='Фото в профиль', upload_to=upload_avatar_path, blank=True, null=True)
     email = models.EmailField(_('email address'), blank=True)
     # purchased_courses = models.CharField(_('purchased_courses'), max_length=400, blank=True, null=True)
-    purchased_courses = models.ManyToManyField(Courses)
+    purchased_courses = models.ManyToManyField(Courses, blank=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,

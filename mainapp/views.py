@@ -41,7 +41,7 @@ class NewsListView(ListView):
 class NewsCreateView(PermissionRequiredMixin, CreateView):
     model = mainapp_models.News
     fields = '__all__'
-    success_url = reverse_lazy('mainapp_namespace:main_page')
+    success_url = reverse_lazy('mainapp_namespace:news_list')
     permission_required = ('mainapp.add_news',)
 
 class NewsDetailView(DetailView):

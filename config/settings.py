@@ -260,3 +260,8 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 
 SELENIUM_DRIVER_PATH_FF = BASE_DIR / 'var' / 'selenium' / 'geckodriver'
 
+CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1']
+
+# Отключить CSRF для тестирования (не рекомендуется в продакшн)
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
