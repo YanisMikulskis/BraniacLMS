@@ -2,6 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 from celery import Celery
+from django.conf import settings
+if settings.DEBUG:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
 
 #Для начала нужно установить значение по умолчанию для среды DJANGO_SETTINGS_MODULE,
 # чтобы Celery знала, как найти проект Django.
