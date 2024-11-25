@@ -21,6 +21,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = "django-insecure-ovc9%f161n0p4*g5(@51)@8h71$s^h#h1p5(imlb#%71oo1l@w"
 
 # SECURITY WARNING: don't run with debug turned on in production!

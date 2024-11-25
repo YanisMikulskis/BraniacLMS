@@ -60,41 +60,41 @@ class TestNewsPage(TestCase):
         """
         Открытие страницы новостей
         """
-        path = reverse('mainapp_namespace:news_list')
-        result = self.client.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.OK)
+        path = reverse('mainapp_namespace:news_list') # путь к странице новостей
+        result = self.client.get(path)# виртуальный пользователь переходит по пути
+        self.assertEqual(result.status_code, HTTPStatus.OK)# результат с обоих сторон должен быть 200
 
     def test_page_open_detail(self):
         """
         Открытие деталей новостей
         """
-        news_obj = News.objects.first()
-        path = reverse('mainapp_namespace:news_detail', args=[news_obj.pk])
-        result = self.client.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.OK)
+        news_obj = News.objects.first() # берем в качестве примера первую новость из БД
+        path = reverse('mainapp_namespace:news_detail', args=[news_obj.pk]) # путь к деталям первой новости
+        result = self.client.get(path) # виртуальный пользователь переходит по пути
+        self.assertEqual(result.status_code, HTTPStatus.OK) # результат с обоих сторон должен быть 200
 
     def test_page_open_create_deny_access(self):
         """
         Защита от создания новостей неавторизованными пользователями
         """
-        path = reverse('mainapp_namespace:news_create')
-        result = self.client.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.FOUND)
+        path = reverse('mainapp_namespace:news_create') # путь к созданию новости НЕ модератором
+        result = self.client.get(path)# виртуальный пользователь переходит по пути
+        self.assertEqual(result.status_code, HTTPStatus.FOUND) # результат должен быть 302 (редирект)
 
     def test_page_open_create_by_admin(self):
         """
         Открытие страницы создания новостей модераторами
         """
-        path = reverse('mainapp_namespace:news_create')
-        result = self.client_with_auth.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.OK)
+        path = reverse('mainapp_namespace:news_create')# путь к созданию новости модератором
+        result = self.client_with_auth.get(path)# модератор или суперпользователь переходит по пути
+        self.assertEqual(result.status_code, HTTPStatus.OK)# результат с обоих сторон должен быть 200
 
     def test_create_in_web(self):
         """
         Создание новостей модератором
         """
-        counter_before = News.objects.count()
-        path = reverse('mainapp_namespace:news_create')
+        counter_before = News.objects.count()# количество объектов новостей в БД
+        path = reverse('mainapp_namespace:news_create') # путь к странице создания новости
         self.client_with_auth.post(
             path,
             data={
@@ -102,35 +102,34 @@ class TestNewsPage(TestCase):
                 'preambule': 'NewTestNews001',
                 'body': 'NewTestNews001'
             }
-        )
-        self.assertGreater(News.objects.count(), counter_before)
+        ) # модератор или суперпользователь отправляет данные для создания новости
+        self.assertGreater(News.objects.count(), counter_before) # количество новостей после операции должно быть больше
 
     def test_page_open_update_deny_access(self):
         """
         Защита от изменения новостей неавторизованными пользователями
         """
-        news_obj = News.objects.first()
-        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk])
-        result = self.client.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.FOUND)
+        news_obj = News.objects.first()# первая новость из бД для примера
+        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk]) # путь к изменению этой новости
+        self.assertEqual(result.status_code, HTTPStatus.FOUND) # должен быть ответь 302 ( редирект)
 
     def test_page_open_update_by_admin(self):
         """
         Открытие страницы изменения новостей модераторами
         """
-        news_obj = News.objects.first()
-        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk])
-        result = self.client_with_auth.get(path)
-        self.assertEqual(result.status_code, HTTPStatus.OK)
+        news_obj = News.objects.first()# первая новость из бД для примера
+        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk])# путь к изменению этой новости
+        result = self.client_with_auth.get(path) # переход модератора или рута по пути
+        self.assertEqual(result.status_code, HTTPStatus.OK) # должен быть ответ 200
 
     def test_update_in_web(self):
         """
         Изменение новостей (модератором)
         """
-        new_title = 'NewsTestTitle0001'
-        news_obj = News.objects.first()
-        self.assertNotEqual(news_obj.title, new_title)
-        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk])
+        new_title = 'NewsTestTitle0001' # название для новости, которую будем создавать
+        news_obj = News.objects.first()# первая новость из БД для пример
+        self.assertNotEqual(news_obj.title, new_title) # название новой новости и новости из БД должны отличаться
+        path = reverse('mainapp_namespace:news_update', args=[news_obj.pk])# путь к изменению этой новости
         result = self.client_with_auth.post(
             path,
             data={
@@ -138,29 +137,29 @@ class TestNewsPage(TestCase):
                 'preambule': news_obj.preambule,
                 'body': news_obj.body
             }
-        )
-        self.assertEqual(result.status_code, HTTPStatus.FOUND)
-        news_obj.refresh_from_db()
-        self.assertEqual(news_obj.title, new_title)
+        )# модератор или суперзер отправляет данные для изменения ноовости
+        self.assertEqual(result.status_code, HTTPStatus.FOUND) # должен быть код 302 (редирект)
+        news_obj.refresh_from_db() # обновляем данные бд
+        self.assertEqual(news_obj.title, new_title) # имя новости в БД должно соответствовать тому, которое мы туда отправили
 
     def test_delete_deny_access(self):
         """
         Защита от удаления новостей неавторизованными пользователями
         """
-        news_obj = News.objects.first()
-        path = reverse('mainapp_namespace:news_delete', args=[news_obj.pk])
-        result = self.client.post(path)
-        self.assertEqual(result.status_code, HTTPStatus.FOUND)
+        news_obj = News.objects.first()# первая новость из БД для пример
+        path = reverse('mainapp_namespace:news_delete', args=[news_obj.pk])# путь к удалению этой новости
+        result = self.client.post(path)# путь неавторизованного или НЕмодератора юзера к странице удаения
+        self.assertEqual(result.status_code, HTTPStatus.FOUND) # страница не должна открыться
 
     def test_delete_in_web(self):
         """
         Удаление новости модератором
         """
-        news_obj = News.objects.first()
-        path = reverse('mainapp_namespace:news_delete', args=[news_obj.pk])
-        response = self.client_with_auth.post(path)
-        news_obj.refresh_from_db()
-        self.assertTrue(news_obj.deleted)
+        news_obj = News.objects.first()# первая новость из БД для пример
+        path = reverse('mainapp_namespace:news_delete', args=[news_obj.pk])# путь к удалению этой новости
+        response = self.client_with_auth.post(path)# переход модератора по пути
+        news_obj.refresh_from_db() # обновляем объект в базе данны
+        self.assertTrue(news_obj.deleted) # поле объекта deleted должно быть True
 
 
 def is_redis_available():
@@ -168,11 +167,11 @@ def is_redis_available():
     Проверка включен Redis или нет
     """
     try:
-        client = redis.StrictRedis(host='localhost', port=6379, db=0)
-        client.ping()
-        return True
+        client = redis.StrictRedis(host='localhost', port=6379, db=0) #экземпляр класса для редиса (на вход подаются данные хранилища)
+        client.ping() # сигнал для редиса (при включенном редисе должен отработать без ошибо)
+        return True# редис включен
     except redis.ConnectionError:
-        return False
+        return False# редис выкл
 
 
 class TestCoursesWithMock(TestCase):
@@ -213,17 +212,16 @@ class TestCoursesPage(TestCase):
 
     def setUp(self):
         """
-        Логина виртуального пользователя, который случается при каждом тесте. Подробные характеристики пользователя
+        Логин виртуального пользователя, который случается при каждом тесте. Подробные характеристики пользователя
         в фикстуре, ссылка на которую выше
         """
         super().setUp()
 
-        self.client_with_auth = Client()
+        self.client_with_auth = Client()# экземпляр специального класса Client()
 
-        path_auth = reverse('authapp_namespace:login')
+        path_auth = reverse('authapp_namespace:login') # переход на страницу логина
         self.client_with_auth.post(path_auth, data={'username': 'admin',
-                                                    'password': 'admin'})
-
+                                                    'password': 'admin'}) # отправка данных для входа (указаны в фикстуре)
     def test_page_open_courses_list(self):
         """
         Открытие страницы курсов
