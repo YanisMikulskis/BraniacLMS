@@ -1,0 +1,220 @@
+Вы создали сервер «django_basics» с Ubuntu 20.04 LTS, IP-адрес 89.111.155.201
+Доступ к серверу
+Логин: root
+Пароль: nXMfCsgwe5GTCmxl
+
+1) ssh root@89.111.155.201 - подключение к удаленному серваку
+2) adduser djangouser - добавляем нового пользователя
+3) adduser djangouser sudo - даем ему права рута
+4) logout - выходим из под рута
+5) ssh djangouser@89.111.155.201 - подключение к удаленному серверу за нового пользователя
+6) ssh-keygen -t rsa -b 4096 -C 'email' - генерируем ssh ключи
+7) регистрируем юзера на удаленном сервере ssh-copy-id djangouser@89.111.155.201
+
+8) hostname = cv4279063.novalocal получаем имя хоста
+9) редактируем файл etc/hosts
+добавляем строку 127.0.0.1 89-111-155-201
+
+# Создание БД на постгресе на удаленном сервере. Список команд и пояснение
+
+CREATE DATABASE braniac; Создаёт базу данных braniac.
+CREATE USER django with NOSUPERUSER PASSWORD 'geekbrains'; Создаёт пользователя django с ограниченными правами.
+GRANT ALL PRIVILEGES ON DATABASE braniac TO django; Даёт пользователю django полный доступ к базе данных braniac.
+ALTER ROLE django SET CLIENT_ENCODING TO 'UTF8'; Настраивает пользовательские параметры, такие как кодировка...
+ALTER ROLE django SET default_transaction_isolation TO 'READ COMMITTED'; ...и уровень изоляции транзакций.
+
+
+
+
+10) Перенос проекта на сетевой сервер. Выполняем ЛОКАЛЬНО (т.е. в терминале IDE) команду
+На всякий случай зайдем на удаленный сервер и создадим папки myproject/django_project/BraniacLMS
+11) Деплоим
+rsync --archive --compress --delete . djangouser@89.111.155.201:myproject/django_project/BraniacLMS
+
+
+
+
+
+
+12) Миграции на постгрес
+
+
+13) подгрузка статики
+python mange.py collectstatic
+
+
+14) Проверяем работоспособность проекта в деплой режиме
+При текущем сеансе всегда указываем сначала переменную окружения
+
+export DJANGO_SETTINGS_MODULE='config.conf_prod'
+export DJANGO_SECRET_KEY='94kk8i$9*96$)$$s+h&7(@0+p*d32-5s@hel%=p&oog5px15=f' (опционально)
+
+15) апускаем сервер
+gunicorn config.wsgi
+
+Открываем второй терминал и вводим
+
+ssh djangouser@89.111.155.201
+
+curl -i http://127.0.0.1:8000/mainapp/ | head -n 25  (для ответа 200 сразу переходим в приложение)
+-i указывает на то, что вывод должен включать заголовки HTTP-ответа, вышедшие от сервера.
+| head -n 25 — это командная конструкция в UNIX-подобных системах, которая выводит первые 25 строк
+результата предыдущей команды.
+Убеждаемся, то ответ 200 и отключаем этот терминал
+
+16)Для постоянной работы, gunicorn надо развернуть как сервис операционной системы. Один из
+способов создания сервисов — это создание конфигурации для системной службы systemd. Новая
+конфигурация формируется командой:
+sudo nano /etc/systemd/system/gunicorn.service
+вводим следующую конфигурацию
+
+
+[Unit]
+Description=Gunicorn daemon for BraniacLMS
+After=network.target
+
+[Service]
+User=djangouser
+Group=djangouser
+WorkingDirectory=/home/djangouser/myproject/django_project/BraniacLMS
+ExecStart=/home/djangouser/myproject/django_project/ubuntu_venv/bin/gunicorn \
+--workers 3 \
+--bind unix:/home/djangouser/myproject/django_project/BraniacLMS/braniaclms.sock config.wsgi:application
+
+Environment=DJANGO_SETTINGS_MODULE=config.conf_prod
+Environment=DJANGO_SECRET_KEY='94kk8i$9*96$)$$s+h&7(@0+p*d32-5s@hel%=p&oog5px15=f'
+[Install]
+WantedBy=multi-user.target
+
+
+ВАЖНО! При использовании через сокет (braniaclms.sock) сокет используем и в nginx!
+
+
+17) автозагрузка gunicorn
+sudo systemctl enable gunicorn
+
+sudo systemctl start gunicorn запуск сервиса
+sudo systemctl status gunicorn проверка статуса сервера
+
+18) установка nginx
+sudo apt install -y nginx
+
+
+
+18) Настраиваем nginx
+Открываем sudo nano /etc/nginx/sites-available/braniaclms
+Вводим следующее:
+
+server {
+        listen 80;
+        server_name 89.111.155.201;
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location /static/ {
+                root /home/djangouser/myproject/django_project/BraniacLMS;
+        }
+
+        location /media/ {
+                root /home/djangouser/myproject/django_project/BraniacLMS;
+        }
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/djangouser/myproject/django_project/BraniacLMS/braniaclms.sock;
+
+        }
+}
+
+
+ВАЖНО! proxy_pass должен ориентироваться на настройки gunicorn! в данном случае у нас сокет (вместо порта 8000)
+
+Создаем мягкую ссылку (применение настроек)
+sudo ln -s /etc/nginx/sites-available/braniaclms /etc/nginx/sites-enabled/braniaclms
+
+Проверка корректности конфигурации
+sudo nginx -t
+перезапуск nginx
+sudo systemctl restart nginx
+проверка статусы службы
+sudo systemctl status nginx
+
+19) Ставим Редис
+sudo apt_install redis-server
+
+Настраиваем
+Открываем sudo nano /etc/redis/redis.conf
+В конфигурационном файле для параметра supervised устанавливается значение systemd. После
+сохранения конфигурации сервис перезапускается командой: sudo systemctl restart redis-server
+
+20) Ставим Celery
+Открываем sudo nano /etc/systemd/system/celeryd.service
+Вводим
+
+[Unit]
+Description=Celery daemon for BraniacLMS
+
+After=network.target
+[Service]
+User=djangouser
+Group=djangouser
+WorkingDirectory=/home/djangouser/myproject/django_project/BraniacLMS
+Environment='DJANGO_SETTINGS_MODULE=config.conf_prod'
+
+'DJANGO_SECRET_KEY=94kk8i$9*96$)$$s+h&7(@0+p*d32-5s@hel%=p&oog5px15=f'
+
+ExecStart=/home/djangouser/myproject/django_project/ubuntu_venv/bin/celery -A config worker -l INFO
+[Install]
+WantedBy=multi-user.target
+
+
+Загрузка сервиса после перезагрузки сервера
+sudo systemctl enable celeryd
+запуск сервиса
+sudo systemctl start celeryd
+проверка работоспособности сервиса
+sudo systemctl status celeryd
+
+
+21) Установка и настройка фаервола UFW
+sudo apt install -y ufw
+
+проверка доступных приложений
+sudo ufw app list
+
+включение ufw
+sudo ufw enable
+
+включение правил для ufw
+sudo ufw allow 'Nginx HTTP'
+sudo ugw allow 'OpenSSH'
+
+проверка включенных правил
+sudo ufw status
+
+
+
+доп инфа
+
+Вот схема, как Nginx и Gunicorn взаимодействуют:
+Пользователь делает запрос через браузер, например, http://example.com.
+Запрос поступает на сервер в Nginx (на порту 80).
+Nginx проверяет, что запрос динамичный (например, нужно отобразить страницу Django).
+Nginx передает запрос Gunicorn, который слушает на порту 8000.
+Gunicorn обрабатывает запрос с помощью Django, выполняет бизнес-логику и генерирует ответ.
+Ответ от Gunicorn отправляется обратно в Nginx.
+Nginx передает ответ обратно пользователю.
+
+-----Как запустить проект в деплое?
+1) ssh djangouser@89.111.155.201
+2) cd myproject/django_project
+3) source ./ubuntu_venv/bin/activate
+4) export DJANGO_SETTINGS_MODULE='config.conf_prod' && export DJANGO_SECRET_KEY='94kk8i$9*96$)$$s+h&7(@0+p*d32-5s@hel%=p&oog5px15=f'
+5) gunicorn config.wsgi (сам запуск)
+
+Открываем второй терминал
+Проверка:
+1) ssh djangouser@89.111.155.201
+2) curl -i http://127.0.0.1:8000/mainapp/ | head -n 25
+должен быть ответ 200
+3) Подключение к постгрес
+sudo -u postgres psql
+\connect braniac
