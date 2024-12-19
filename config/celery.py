@@ -9,7 +9,9 @@ if settings.DEBUG:
 
 #Для начала нужно установить значение по умолчанию для среды DJANGO_SETTINGS_MODULE,
 # чтобы Celery знала, как найти проект Django.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
 # Затем мы создали экземпляр Celery с именем braniac и поместили в переменную celery_app.
 celery_app = Celery('braniac')
 # Затем мы загрузили значения конфигурации Celery из объекта

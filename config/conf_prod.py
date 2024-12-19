@@ -11,6 +11,7 @@ DATABASES = {
         'USER': 'djangouser',
         'PASSWORD': 'geekbrains',
         'HOST': '127.0.0.1',
+        # 'HOST': '89.111.155.201',
         'PORT': '5432'
     }
 }
